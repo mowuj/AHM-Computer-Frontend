@@ -54,7 +54,7 @@ const Login = () => {
       <Form
         method="post"
         onSubmit={handleLogin}
-        className="w-75 mx-auto my-5 p-5 border border-2 rounded"
+        className="w-50 mx-auto my-5 p-5 border border-2 rounded"
       >
         <Form.Group className="mb-3">
           <Form.Label>User Name</Form.Label>
@@ -77,7 +77,7 @@ const Login = () => {
         </Form.Group>
 
         <Form.Text className="text-primary mb-3">
-          <Link className="text-primary" to="/signup">
+          <Link className="text-primary" to="/register">
             Don't have an account? Register now!
           </Link>
         </Form.Text>

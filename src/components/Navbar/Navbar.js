@@ -44,7 +44,7 @@ const Nav = () => {
       <Navbar bg="light" expand="lg" className="w-10/12 mx-auto">
         <Navbar.Brand>
           <span className="self-center whitespace-nowrap font-semibold text-rose-600 text-3xl">
-            <Link to={"/"}>AHM Computer</Link>
+            <Link to={"/home"}>AHM Computer</Link>
           </span>
         </Navbar.Brand>
 
