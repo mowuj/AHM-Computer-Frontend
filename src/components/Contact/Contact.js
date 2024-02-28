@@ -1,5 +1,5 @@
 import React from 'react';
-
+import about from '../../images/about.jpg'
 const Contact = () => {
     return (
       <div className="container">
@@ -12,9 +12,7 @@ const Contact = () => {
           </div>
           <div className="right col-md-5">
             <p>
-              PET FAIR BD always with you.if you need any help any types of
-              medicine or anything.If you sell or but pet or foods medicine
-              please contact with us.Customer service is first priority for us.
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Id saepe provident quos dicta error vitae, veritatis ad inventore! Rerum provident ex modi molestias dolorum eveniet aut aperiam quas. Iste eveniet magnam nemo eum, impedit esse debitis velit accusamus eligendi autem porro deserunt culpa, excepturi deleniti, maiores in ipsum delectus. Atque.
             </p>
           </div>
         </div>
@@ -46,7 +44,7 @@ const Contact = () => {
           </div>
 
           {/* Email */}
-          <div className="col-md-4 my-3 my-md-0">
+          <di v className="col-md-4 my-3 my-md-0">
             <div className="card w-100 border-0">
               <div className="card-body text-center">
                 <h4 className="card-title">
@@ -56,7 +54,7 @@ const Contact = () => {
                 <p className="fs-5">mowuj92@gmail.com</p>
               </div>
             </div>
-          </div>
+          </di>
         </div>
 
         {/* Get In Touch */}
@@ -67,7 +65,7 @@ const Contact = () => {
                 <div className="card-body d-md-flex justify-content-around align-items-stretch">
                   <div className="col-md-5 d-flex align-items-stretch">
                     <img
-                      src=''
+                      src={about}
                       className="img-fluid rounded w-100 h-100"
                       alt="..."
                     />
@@ -81,8 +79,11 @@ const Contact = () => {
                         method="post"
                         enctype="multipart/form-data"
                       >
+                        <input type="text" class="form-control mb-2" id="name" name="name" required placeholder="Your Name"/>
+    <input type="text" class="form-control mb-2" id="phone" name="phone" required placeholder="Phone Number"/>
+     <textarea class="form-control mb-2" id="content" name="content" rows="3" required placeholder="Your Content"></textarea >
                         <input
-                          className="btn btn-warning"
+                          className="btn btn-warning mx-auto"
                           type="submit"
                           value="Submit"
                         />

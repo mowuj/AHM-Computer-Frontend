@@ -55,7 +55,7 @@ const Nav = () => {
 
         <Navbar.Collapse id="basic-navbar-nav">
           <CustomNav className="mr-auto">
-            <CustomNav.Link as={Link} to={"/shop"}>
+            <CustomNav.Link as={Link} to={"/products"}>
               Shop
             </CustomNav.Link>
             <CustomNav.Link as={Link} to={"/about"}>
@@ -107,7 +107,6 @@ const Nav = () => {
             )}
           </CustomNav>
         </Navbar.Collapse>
-
       </Navbar>
     );
 };
