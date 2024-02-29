@@ -27,7 +27,7 @@ const Register = () => {
         confirm_password: confirm_password,
       };
       const csrftoken = getCookie("csrftoken"); // Get CSRF token from cookie
-      fetch("https://fruitables-api.onrender.com/user/register/", {
+      fetch("https://ahm-computer-backend.onrender.com/customer/register/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

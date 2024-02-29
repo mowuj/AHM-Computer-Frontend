@@ -12,7 +12,7 @@ const Login = () => {
       const formData = { username: username, password: password };
       const csrftoken = getCookie("csrftoken");
 
-      fetch("https://fruitables-api.onrender.com/user/login/", {
+      fetch("https://ahm-computer-backend.onrender.com/customer/login/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -33,7 +33,6 @@ const Login = () => {
           localStorage.setItem("user_id", data.user_id);
           navigate("/");
           window.location.reload();
-          // Provide appropriate feedback to the user that signup was successful
           alert("Signup successful!");
         })
         .catch((error) => {

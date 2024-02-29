@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-const Product = ( {product} ) => {
+const Product = ({ product, addToCart }) => {
   const {
     id,
     name,
@@ -20,6 +20,10 @@ const Product = ( {product} ) => {
     navigate(`/product/${id}`);
   };
 
+  const handleAddToCart = () => {
+    addToCart(product);
+  };
+
   return (
     <div className="card">
       <img src={image} className="card-img-top" alt="..." />
@@ -33,13 +37,17 @@ const Product = ( {product} ) => {
         <p className="my-0">
           <small>{description.slice(0, 100)}</small>{" "}
         </p>
-        <div class="d-flex flex-column gap-1 mt-2">
-          <button type="button" class="btn btn-outline-danger">
+        <div className="d-flex flex-column gap-1 mt-2">
+          <button
+            type="button"
+            className="btn btn-outline-danger"
+            onClick={handleAddToCart}
+          >
             Add To Cart
           </button>
           <button
             type="button"
-            class="btn btn-outline-warning"
+            className="btn btn-outline-warning"
             onClick={navigateToDetails}
           >
             Details
