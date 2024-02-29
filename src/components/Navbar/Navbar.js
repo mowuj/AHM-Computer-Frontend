@@ -41,72 +41,83 @@ const Nav = () => {
       setNavClicked(!navClicked);
     };
     return (
-      <Navbar bg="light" expand="lg" className="w-10/12 mx-auto">
-        <Navbar.Brand>
-          <span className="self-center whitespace-nowrap font-semibold text-rose-600 text-3xl">
-            <Link to={"/home"}>AHM Computer</Link>
-          </span>
-        </Navbar.Brand>
+      <Navbar className="navbar navbar-expand-lg bg-body-tertiary">
+        <div className="container-fluid">
+          <Link to={"/home"} className="navbar-brand">
+            AHM Computer
+          </Link>
 
-        <Navbar.Toggle
-          aria-controls="basic-navbar-nav"
-          onClick={handleNavToggle}
-        />
+          <button
+            className="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+            onClick={handleNavToggle}
+          >
+            <span className="navbar-toggler-icon"></span>
+          </button>
 
-        <Navbar.Collapse id="basic-navbar-nav">
-          <CustomNav className="mr-auto">
-            <CustomNav.Link as={Link} to={"/products"}>
-              Shop
-            </CustomNav.Link>
-            <CustomNav.Link as={Link} to={"/about"}>
-              About
-            </CustomNav.Link>
-            <CustomNav.Link as={Link} to={"/contact"}>
-              Contact
-            </CustomNav.Link>
-          </CustomNav>
-
-          <CustomNav className="ml-auto">
-            <CustomNav.Link as={Link} to={"/addtocart"}>
-              <IoMdCart className="text-3xl mr-3" />
-            </CustomNav.Link>
-
-            {!user && (
-              <CustomNav.Link
-                as={Link}
-                to={"/login"}
-                className="font-semibold bg-primary text-white p-2 rounded"
-              >
-                <CiUser className="text-2xl" /> Sign In
+          <div
+            className={`collapse navbar-collapse ${navClicked ? "show" : ""}`}
+            id="navbarSupportedContent"
+          >
+            <CustomNav className="mr-auto">
+              <CustomNav.Link as={Link} to={"/products"}>
+                Shop
               </CustomNav.Link>
-            )}
+              <CustomNav.Link as={Link} to={"/about"}>
+                About
+              </CustomNav.Link>
+              <CustomNav.Link as={Link} to={"/contact"}>
+                Contact
+              </CustomNav.Link>
+            </CustomNav>
 
-            {user && (
-              <NavDropdown
-                title={<CiUser className="text-2xl" />}
-                id="basic-nav-dropdown"
-              >
-                <NavDropdown.Header>
-                  <span className="block text-sm">
-                    {profile?.first_name} {profile?.last_name}
-                  </span>
-                  <span className="block truncate text-sm font-medium">
-                    {profile?.email}
-                  </span>
-                </NavDropdown.Header>
-                <NavDropdown.Item>
-                  {" "}
-                  <CiUser className="mr-2" />{" "}
-                  <Link to={"/dashboard"}>Dashboard</Link>
-                </NavDropdown.Item>
-                <NavDropdown.Divider />
-                <NavDropdown.Item onClick={handleLogout}>
-                  Sign out
-                </NavDropdown.Item>
-              </NavDropdown>
-            )}
-          </CustomNav>
-        </Navbar.Collapse>
+            <CustomNav className="ml-auto">
+              <CustomNav.Link as={Link} to={"/addtocart"}>
+                <IoMdCart className="text-3xl mr-3" />
+              </CustomNav.Link>
+
+              {!user && (
+                <CustomNav.Link
+                  as={Link}
+                  to={"/login"}
+                  className="font-semibold bg-primary text-white p-2 rounded"
+                >
+                  <CiUser className="text-2xl" /> Sign In
+                </CustomNav.Link>
+              )}
+
+              {user && (
+                <NavDropdown
+                  title={<CiUser className="text-2xl" />}
+                  id="basic-nav-dropdown"
+                >
+                  <NavDropdown.Header>
+                    <span className="block text-sm">
+                      {profile?.first_name} {profile?.last_name}
+                    </span>
+                    <span className="block truncate text-sm font-medium">
+                      {profile?.email}
+                    </span>
+                  </NavDropdown.Header>
+                  <NavDropdown.Item>
+                    {" "}
+                    <CiUser className="mr-2" />{" "}
+                    <Link to={"/dashboard"}>Dashboard</Link>
+                  </NavDropdown.Item>
+                  <NavDropdown.Divider />
+                  <NavDropdown.Item onClick={handleLogout}>
+                    Sign out
+                  </NavDropdown.Item>
+                </NavDropdown>
+              )}
+            </CustomNav>
+          </div>
+        </div>
       </Navbar>
     );
 };

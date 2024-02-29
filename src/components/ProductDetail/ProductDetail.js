@@ -18,12 +18,12 @@ const ProductDetails = (id) => {
         </div>
         <div className="col-md-6">
           <h2>{product.name}</h2>
-          <p>Category: {product.category}</p>
-          <p>Brand: {product.brand}</p>
-          <p>Price: {product.price}</p>
-          <p>Quantity: {product.quantity}</p>
-          <p>Discount: {product.discount}</p>
-          <p>Description: {product.description}</p>
+          <p class="my-0">Category: {product.category}</p>
+          <p class="my-0">Brand: {product.brand}</p>
+          <p class="my-0">Price: {product.price}</p>
+          <p class="my-0">Quantity: {product.quantity}</p>
+          <p class="my-0">Discount: {product.discount}</p>
+          <p class="my-0">Description: {product.description}</p>
         </div>
       </div>
     </div>

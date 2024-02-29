@@ -1,32 +1,53 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import React from "react";
+import { useNavigate } from "react-router-dom";
 
-const Product = (product) => {
-    const { id,name,category,brand, image, description, price, quantity,discount } =
-    product.product;
+const Product = ( {product} ) => {
+  const {
+    id,
+    name,
+    category,
+    brand,
+    image,
+    description,
+    price,
+    quantity,
+    discount,
+  } = product;
+
   const navigate = useNavigate();
-  const navigateToDetails = (id) => {
+
+  const navigateToDetails = () => {
     navigate(`/product/${id}`);
   };
-    return (
-      <div class="card">
-        <img src={image} class="card-img-top" alt="..." />
-        <div class="card-body">
-          <h5 class="card-title">Name:{name}</h5>
-          <p>Price:{price}</p>
-          <p>Quantity:{quantity}</p>
-          <p>Category:{category}</p>
-          <p>Brand:{brand}</p>
-          <p>Discount:{discount}</p>
-          <p>
-            <small>{description}</small>{" "}
-          </p>
-          <button className="btn btn-primary" onClick={() => navigateToDetails(id)}>
+
+  return (
+    <div className="card">
+      <img src={image} className="card-img-top" alt="..." />
+      <div className="card-body">
+        <h5 className="card-title">Name: {name}</h5>
+        <p className="my-0">Price: {price}</p>
+        <p className="my-0">Quantity: {quantity}</p>
+        <p className="my-0">Category: {category}</p>
+        <p className="my-0">Brand: {brand}</p>
+        <p className="my-0">Discount: {discount}</p>
+        <p className="my-0">
+          <small>{description.slice(0, 100)}</small>{" "}
+        </p>
+        <div class="d-flex flex-column gap-1 mt-2">
+          <button type="button" class="btn btn-outline-danger">
+            Add To Cart
+          </button>
+          <button
+            type="button"
+            class="btn btn-outline-warning"
+            onClick={navigateToDetails}
+          >
             Details
           </button>
         </div>
       </div>
-    );
+    </div>
+  );
 };
 
 export default Product;
