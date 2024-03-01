@@ -8,7 +8,7 @@ const Nav = () => {
     const userId = localStorage.getItem("user_id");
 
     useEffect(() => {
-      fetch(`https://fruitables-api.onrender.com/user/data/${userId}`)
+      fetch(`https://ahm-computer-backend.onrender.com/customer/data/${userId}`)
         .then((res) => res.json())
         .then((data) => setProfile(data));
     }, []);
@@ -19,10 +19,10 @@ const Nav = () => {
       const token = localStorage.getItem("token");
       const user_id = localStorage.getItem("user_id");
       setUser(user_id);
-    });
+    },[]);
 
     const handleLogout = () => {
-      fetch("https://fruitables-api.onrender.com/user/logout", {
+      fetch("https://ahm-computer-backend.onrender.com/customer/logout/", {
         method: "GET",
         headers: { "content-type": "application/json" },
       })
@@ -77,7 +77,7 @@ const Nav = () => {
             </CustomNav>
 
             <CustomNav className="ml-auto">
-              <CustomNav.Link as={Link} to={"/addtocart"}>
+              <CustomNav.Link as={Link} to={"/cart"}>
                 <IoMdCart className="text-3xl mr-3" />
               </CustomNav.Link>
 
@@ -98,15 +98,15 @@ const Nav = () => {
                 >
                   <NavDropdown.Header>
                     <span className="block text-sm">
-                      {profile?.first_name} {profile?.last_name}
+                      
                     </span>
                     <span className="block truncate text-sm font-medium">
-                      {profile?.email}
+                      
                     </span>
                   </NavDropdown.Header>
                   <NavDropdown.Item>
-                    {" "}
-                    <CiUser className="mr-2" />{" "}
+                    
+                    <CiUser className="mr-2" />
                     <Link to={"/dashboard"}>Dashboard</Link>
                   </NavDropdown.Item>
                   <NavDropdown.Divider />

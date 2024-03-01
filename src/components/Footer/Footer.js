@@ -30,7 +30,7 @@ const Footer = () => {
           </div>
           <hr />
           <p class="text-center mt-3">
-            <small>Copyright @ PET FAIR BD. All Rights Reserved</small>
+            <small>Copyright @ AHM Computer. All Rights Reserved</small>
           </p>
         </div>
       </div>

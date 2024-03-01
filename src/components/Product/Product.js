@@ -20,10 +20,6 @@ const Product = ({ product, addToCart }) => {
     navigate(`/product/${id}`);
   };
 
-  const handleAddToCart = () => {
-    addToCart(product);
-  };
-
   return (
     <div className="card">
       <img src={image} className="card-img-top" alt="..." />
@@ -41,7 +37,7 @@ const Product = ({ product, addToCart }) => {
           <button
             type="button"
             className="btn btn-outline-danger"
-            onClick={handleAddToCart}
+            onClick={addToCart}
           >
             Add To Cart
           </button>

@@ -2,22 +2,16 @@ import React, { useState, useEffect } from "react";
 import useProduct from "../../hooks/useProduct";
 import Product from "../Product/Product";
 import { Dropdown } from "react-bootstrap";
+import toast, { Toaster } from "react-hot-toast";
 
 const Products = () => {
-  // Move the function declaration before its usage in useState
-  const getCartFromLocalStorage = () => {
-    const storedCart = localStorage.getItem("cart");
-    return storedCart ? JSON.parse(storedCart) : [];
-  };
-  const user = localStorage.getItem("user_id");
   const [products, setProducts] = useProduct();
   const [selectedBrand, setSelectedBrand] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [categories, setCategories] = useState([]);
   const [brands, setBrands] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [cartItems, setCartItems] = useState(getCartFromLocalStorage);
-  const csrftoken = getCookie("csrftoken");
+const user_id=localStorage.getItem("user_id")
   useEffect(() => {
     // Fetch categories
     fetch("https://ahm-computer-backend.onrender.com/product/category/")
@@ -32,65 +26,60 @@ const Products = () => {
       .then((data) => setBrands(data));
   }, []);
 
-  const setCartToLocalStorage = (cart) => {
-    localStorage.setItem("cart", JSON.stringify(cart));
-  };
 
-  const addToCart = (product) => {
-    const existingItem = cartItems.find((item) => item.id === product.id);
+const handleaddtocart = (product) => {
+  const cartItems = JSON.parse(localStorage.getItem("product")) || [];
+  const isItemInCart = cartItems.some((item) => item.id === product.id);
 
-    if (existingItem) {
-      const updatedCart = cartItems.map((item) =>
-        item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
-      );
-      setCartItems(updatedCart);
-      setCartToLocalStorage(updatedCart);
-    } else {
-      const updatedCart = [...cartItems, { ...product, quantity: 1 }];
-      setCartItems(updatedCart);
-      setCartToLocalStorage(updatedCart);
-
-      fetch("https://ahm-computer-backend.onrender.com/product/add_to_cart/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-CSRFToken": csrftoken,
-        },
-        body: JSON.stringify({
-          orderId: null,
-          customer: user,
-          product: product.id,
-          Quantity: 1,
-          amount: null,
-          total_amount: null,
-        }),
-      })
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-          }
-          return response.json();
-        })
-        .then((data) => {
-          console.log("Server response data:", data);
-          const updatedCartWithServerData = [...updatedCart, data];
-          setCartItems(updatedCartWithServerData);
-          setCartToLocalStorage(updatedCartWithServerData);
-          console.log("Item added to the cart:", data);
-        })
-        .catch((error) => {
-          console.error("Error adding item to the cart:", error.message);
-        });
-    }
-  };
-
-
-  function getCookie(name) {
-    const cookieValue = document.cookie.match(
-      "(^|;)\\s*" + name + "\\s*=\\s*([^;]+)"
+  if (isItemInCart) {
+    // If the item is already in the cart, increase the quantity
+    const updatedCartItems = cartItems.map((item) =>
+      item.id === product.id ? { ...item, Quantity: item.Quantity + 1 } : item
     );
-    return cookieValue ? cookieValue.pop() : "";
+    localStorage.setItem("product", JSON.stringify(updatedCartItems));
+
+    // Update the quantity in the state or wherever it's used
+    // (this depends on your application's structure)
+    // Example: setCartItems(updatedCartItems);
+
+    toast.success("Quantity increased in the cart!");
+  } else {
+    // If the item is not in the cart, add it with quantity 1
+    const updatedCartItems = [...cartItems, { ...product, Quantity: 1 }];
+    localStorage.setItem("product", JSON.stringify(updatedCartItems));
+
+    // Update the cart items in the state or wherever it's used
+    // (this depends on your application's structure)
+    // Example: setCartItems(updatedCartItems);
+
+    toast.success("Item added to the cart successfully!");
   }
+
+  const orderId = new Date().getTime();
+  fetch("https://ahm-computer-backend.onrender.com/product/cart/", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      customer: user_id,
+      orderId: orderId,
+      product: product,
+      Quantity: 1,
+      amount: product.price,
+      total_amount: product.amount,
+    }),
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      console.log("Product added to the cart API:", data);
+    })
+    .catch((error) => {
+      console.error("Error adding product to the cart API:", error);
+    });
+};
+
+
   const handleBrandClick = (brand) => {
     setSelectedBrand(brand);
     setSelectedCategory(null);
@@ -186,7 +175,10 @@ const Products = () => {
           <div className="row row-cols-1 row-cols-md-3 g-2">
             {filteredProducts.map((product) => (
               <div className="col" key={product.id}>
-                <Product product={product} addToCart={addToCart} />
+                <Product
+                  product={product}
+                  addToCart={() => handleaddtocart(product.id)}
+                />
               </div>
             ))}
           </div>
