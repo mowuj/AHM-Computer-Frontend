@@ -3,59 +3,66 @@ import { Button, Form } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
 const Register = () => {
-    const handleSignup = (e) => {
-      e.preventDefault();
-      const form = e.target;
-      const username = form.username.value;
-      const firstname = form.firstname.value;
-      const lastname = form.lastname.value;
-      const email = form.email.value;
-      const password = form.password.value;
-      const confirm_password = form.confirm_password.value;
+  const handleSignup = (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const username = form.username.value;
+    const first_name = form.first_name.value;
+    const last_name = form.last_name.value;
+    const email = form.email.value;
+    const password = form.password.value;
+    const confirm_password = form.confirm_password.value;
+    const mobile_no = form.mobile_no.value;
+    const address = form.address.value;
+    const image = form.image.files[0];
 
-      if (password !== confirm_password) {
-        alert("Passwords do not match");
-        return;
-      }
-
-      const formData = {
-        username: username,
-        first_name: firstname,
-        last_name: lastname,
-        email: email,
-        password: password,
-        confirm_password: confirm_password,
-      };
-      const csrftoken = getCookie("csrftoken"); // Get CSRF token from cookie
-      fetch("https://ahm-computer-backend.onrender.com/customer/register/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-CSRFToken": csrftoken, // Include CSRF token in headers
-        },
-        body: JSON.stringify(formData),
-      })
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error("Network response was not ok");
-          }
-          return response.json();
-        })
-        .then((data) => {
-          console.log("Signup successful:", data);
-          alert("Signup successful!");
-        })
-        .catch((error) => {
-          console.error("Error during signup:", error);
-          alert("Signup failed. Please try again later.");
-        });
-    };
-    function getCookie(name) {
-      const cookieValue = document.cookie.match(
-        "(^|;)\\s*" + name + "\\s*=\\s*([^;]+)"
-      );
-      return cookieValue ? cookieValue.pop() : "";
+    if (password !== confirm_password) {
+      alert("Passwords do not match");
+      return;
     }
+
+    const formData = new FormData(); // Use FormData to handle file uploads
+    formData.append("username", username);
+    formData.append("first_name", first_name);
+    formData.append("last_name", last_name);
+    formData.append("email", email);
+    formData.append("password", password);
+    formData.append("confirm_password", confirm_password);
+    formData.append("mobile_no", mobile_no);
+    formData.append("address", address);
+    formData.append("image", image); 
+
+    const csrftoken = getCookie("csrftoken");
+
+    fetch("https://ahm-computer-backend.onrender.com/customer/register/", {
+      method: "POST",
+      headers: {
+        "X-CSRFToken": csrftoken,
+      },
+      body: formData,
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log("Signup successful:", data);
+        alert("Signup successful!");
+      })
+      .catch((error) => {
+        console.error("Error during signup:", error);
+        alert("Signup failed. Please try again later.");
+      });
+  };
+
+  function getCookie(name) {
+    const cookieValue = document.cookie.match(
+      "(^|;)\\s*" + name + "\\s*=\\s*([^;]+)"
+    );
+    return cookieValue ? cookieValue.pop() : "";
+  }
 
   return (
     <>
@@ -63,13 +70,14 @@ const Register = () => {
         method="post"
         onSubmit={handleSignup}
         className="w-50 mx-auto my-5 p-5 border border-2 rounded"
+        enctype="multipart/form-data"
       >
         <Form.Group className="mb-3">
           <Form.Label>User Name</Form.Label>
           <Form.Control
             type="text"
             name="username"
-            placeholder="Your Name"
+            placeholder="User Name"
             required
           />
         </Form.Group>
@@ -78,7 +86,7 @@ const Register = () => {
           <Form.Label>First Name</Form.Label>
           <Form.Control
             type="text"
-            name="firstname"
+            name="first_name"
             placeholder="Your First Name"
             required
           />
@@ -88,7 +96,7 @@ const Register = () => {
           <Form.Label>Last Name</Form.Label>
           <Form.Control
             type="text"
-            name="lastname"
+            name="last_name"
             placeholder="Your Last Name"
             required
           />
@@ -122,6 +130,26 @@ const Register = () => {
             placeholder="Confirm Password"
             required
           />
+        </Form.Group>
+
+        <Form.Group className="mb-3">
+          <Form.Label>Your Mobile Number</Form.Label>
+          <Form.Control
+            type="text"
+            name="mobile_no"
+            placeholder="Your Mobile Number"
+            required
+          />
+        </Form.Group>
+
+        <Form.Group className="mb-3">
+          <Form.Label>Your Address</Form.Label>
+          <Form.Control type="text" name="address" placeholder="Your Address" />
+        </Form.Group>
+
+        <Form.Group className="mb-3">
+          <Form.Label>Your Image</Form.Label>
+          <Form.Control type="file" name="image" accept="image/*" required />
         </Form.Group>
 
         <Form.Text className="text-primary mb-3">

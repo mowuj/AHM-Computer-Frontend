@@ -31,6 +31,7 @@ const Login = () => {
 
           localStorage.setItem("token", data.token);
           localStorage.setItem("user_id", data.user_id);
+          localStorage.setItem("customer_id", data.customer_id);
           navigate("/");
           window.location.reload();
           alert("Signup successful!");

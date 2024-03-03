@@ -11,7 +11,8 @@ const Products = () => {
   const [categories, setCategories] = useState([]);
   const [brands, setBrands] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-const user_id=localStorage.getItem("user_id")
+  const user_id = localStorage.getItem("user_id");
+  const customer_id = localStorage.getItem("customer_id");
   useEffect(() => {
     // Fetch categories
     fetch("https://ahm-computer-backend.onrender.com/product/category/")
@@ -19,65 +20,82 @@ const user_id=localStorage.getItem("user_id")
       .then((data) => {
         setCategories(data);
       });
-
     // Fetch brands
     fetch("https://ahm-computer-backend.onrender.com/product/brand/")
       .then((response) => response.json())
       .then((data) => setBrands(data));
   }, []);
 
+  const handleaddtocart = async (product) => {
+    try {
+      const cartItems = JSON.parse(localStorage.getItem("product")) || [];
+      const isItemInCart = cartItems.some((item) => item.id === product.id);
 
-const handleaddtocart = (product) => {
-  const cartItems = JSON.parse(localStorage.getItem("product")) || [];
-  const isItemInCart = cartItems.some((item) => item.id === product.id);
+      let cartId = localStorage.getItem("cartId");
 
-  if (isItemInCart) {
-    // If the item is already in the cart, increase the quantity
-    const updatedCartItems = cartItems.map((item) =>
-      item.id === product.id ? { ...item, Quantity: item.Quantity + 1 } : item
-    );
-    localStorage.setItem("product", JSON.stringify(updatedCartItems));
+      if (!cartId) {
+        const cartResponse = await fetch(
+          "https://ahm-computer-backend.onrender.com/cart/list/",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              customer: customer_id,
+              total: 0,
+            }),
+          }
+        );
 
-    // Update the quantity in the state or wherever it's used
-    // (this depends on your application's structure)
-    // Example: setCartItems(updatedCartItems);
+        const cartData = await cartResponse.json();
+        console.log("Cart creation API response:", cartData);
+    
+          cartId = cartData.id;
+          console.log(cartId)
+          localStorage.setItem("cartId", cartId);
+      }
 
-    toast.success("Quantity increased in the cart!");
-  } else {
-    // If the item is not in the cart, add it with quantity 1
-    const updatedCartItems = [...cartItems, { ...product, Quantity: 1 }];
-    localStorage.setItem("product", JSON.stringify(updatedCartItems));
+      const cartProductResponse = await fetch(
+        "https://ahm-computer-backend.onrender.com/cart/cartProduct/",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            price: product.price,
+            quantity: 1,
+            subtotal: product.price,
+            cart: parseInt(cartId),
+            product: product.id,
+          }),
+        }
+      );
 
-    // Update the cart items in the state or wherever it's used
-    // (this depends on your application's structure)
-    // Example: setCartItems(updatedCartItems);
+      const productData = await cartProductResponse.json();
+      console.log("Product added to the cartProduct API:", productData);
 
-    toast.success("Item added to the cart successfully!");
-  }
-
-  const orderId = new Date().getTime();
-  fetch("https://ahm-computer-backend.onrender.com/product/cart/", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      customer: user_id,
-      orderId: orderId,
-      product: product,
-      Quantity: 1,
-      amount: product.price,
-      total_amount: product.amount,
-    }),
-  })
-    .then((res) => res.json())
-    .then((data) => {
-      console.log("Product added to the cart API:", data);
-    })
-    .catch((error) => {
-      console.error("Error adding product to the cart API:", error);
-    });
-};
+      // Update the local storage cartItems
+      if (isItemInCart) {
+        const updatedCartItems = cartItems.map((item) =>
+          item.id === product.id
+            ? { ...item, Quantity: item.Quantity + 1 }
+            : item
+        );
+        localStorage.setItem("product", JSON.stringify(updatedCartItems));
+        toast.success("Quantity increased in the cart!");
+      } else {
+        const updatedCartItems = [...cartItems, { ...product, Quantity: 1 }];
+        localStorage.setItem("product", JSON.stringify(updatedCartItems));
+        toast.success("Item added to the cart successfully!");
+      }
+    } catch (error) {
+      console.error("Error in handleaddtocart:", error);
+      // Handle error, show a toast or other appropriate actions
+      toast.error("Failed to add item to the cart");
+    }
+  };
 
 
   const handleBrandClick = (brand) => {
@@ -177,7 +195,7 @@ const handleaddtocart = (product) => {
               <div className="col" key={product.id}>
                 <Product
                   product={product}
-                  addToCart={() => handleaddtocart(product.id)}
+                  addToCart={() => handleaddtocart(product)}
                 />
               </div>
             ))}

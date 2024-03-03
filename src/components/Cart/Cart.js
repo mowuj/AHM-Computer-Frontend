@@ -9,7 +9,7 @@ const Cart = () => {
       .then((res) => res.json())
       .then((data) => {
         if (data.length > 0) {
-          // Assuming total_amount is present in the first item
+        
           setTotalAmount(data[0].total_amount);
         }
 
@@ -59,7 +59,40 @@ const handleDelete = (productId) => {
       console.error("Error deleting item from the cart:", error);
     });
 };
+const handleOrderNow = () => {
+  const orderData = {
 
+    orderId: 0, 
+    customer: 1, 
+    product: 1,
+    Quantity: 1, // Replace with the correct quantity
+    amount: 0, // Replace with the correct amount
+    total_amount: totalAmount, // Assuming totalAmount is the correct total amount
+    payment: false, // Replace with the correct payment status
+  };
+
+  fetch("https://ahm-computer-backend.onrender.com/order/", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(orderData),
+  })
+    .then((res) => {
+      if (!res.ok) {
+        throw new Error(`Network response was not ok: ${res.status}`);
+      }
+      return res.json();
+    })
+    .then((data) => {
+      // Handle success, e.g., show a success message
+      console.log("Order placed successfully:", data);
+      setCartItems([]);
+    })
+    .catch((error) => {
+      console.error("Error placing order:", error);
+    });
+};
 
   return (
     <>

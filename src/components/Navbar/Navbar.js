@@ -5,10 +5,10 @@ import { IoMdCart } from "react-icons/io";
 import { CiUser } from "react-icons/ci";
 const Nav = () => {
     const [profile, setProfile] = useState([]);
-    const userId = localStorage.getItem("user_id");
+    const customer_id = localStorage.getItem("customer_id");
 
     useEffect(() => {
-      fetch(`https://ahm-computer-backend.onrender.com/customer/data/${userId}`)
+      fetch(`https://ahm-computer-backend.onrender.com/customer/data/${customer_id}`)
         .then((res) => res.json())
         .then((data) => setProfile(data));
     }, []);
@@ -17,8 +17,8 @@ const Nav = () => {
 
     useEffect(() => {
       const token = localStorage.getItem("token");
-      const user_id = localStorage.getItem("user_id");
-      setUser(user_id);
+      const customer_id = localStorage.getItem("customer_id");
+      setUser(customer_id);
     },[]);
 
     const handleLogout = () => {
