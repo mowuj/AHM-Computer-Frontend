@@ -3,28 +3,18 @@ import useProduct from "../../hooks/useProduct";
 import Product from "../Product/Product";
 import { Dropdown } from "react-bootstrap";
 import toast, { Toaster } from "react-hot-toast";
+import useCategory from "../../hooks/useCategory";
+import useBrand from "../../hooks/useBrand";
 
 const Products = () => {
   const [products, setProducts] = useProduct();
   const [selectedBrand, setSelectedBrand] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState(null);
-  const [categories, setCategories] = useState([]);
-  const [brands, setBrands] = useState([]);
+  const [categories, setCategories] = useCategory();
+  const [brands, setBrands] = useBrand();
   const [searchTerm, setSearchTerm] = useState("");
   const user_id = localStorage.getItem("user_id");
   const customer_id = localStorage.getItem("customer_id");
-  useEffect(() => {
-    // Fetch categories
-    fetch("https://ahm-computer-backend.onrender.com/product/category/")
-      .then((response) => response.json())
-      .then((data) => {
-        setCategories(data);
-      });
-    // Fetch brands
-    fetch("https://ahm-computer-backend.onrender.com/product/brand/")
-      .then((response) => response.json())
-      .then((data) => setBrands(data));
-  }, []);
 
   const handleaddtocart = async (product) => {
     try {
@@ -76,7 +66,6 @@ const Products = () => {
       const productData = await cartProductResponse.json();
       console.log("Product added to the cartProduct API:", productData);
 
-      // Update the local storage cartItems
       if (isItemInCart) {
         const updatedCartItems = cartItems.map((item) =>
           item.id === product.id
@@ -92,7 +81,7 @@ const Products = () => {
       }
     } catch (error) {
       console.error("Error in handleaddtocart:", error);
-      // Handle error, show a toast or other appropriate actions
+
       toast.error("Failed to add item to the cart");
     }
   };

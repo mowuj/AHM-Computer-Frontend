@@ -21,20 +21,24 @@ const Nav = () => {
       setUser(customer_id);
     },[]);
 
-    const handleLogout = () => {
-      fetch("https://ahm-computer-backend.onrender.com/customer/logout/", {
-        method: "GET",
-        headers: { "content-type": "application/json" },
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          console.log(data);
-        });
-
+const handleLogout = () => {
+  fetch("https://ahm-computer-backend.onrender.com/customer/logout/", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      console.log(data); 
       localStorage.removeItem("token");
       localStorage.removeItem("user_id");
       window.location.reload();
-    };
+    })
+    .catch((error) => {
+      console.error("Logout error:", error);
+      // Handle error, e.g., show a message to the user
+    });
+};
+
 
     const [navClicked, setNavClicked] = useState(true);
     const handleNavToggle = () => {
@@ -110,7 +114,7 @@ const Nav = () => {
                     <Link to={"/dashboard"}>Dashboard</Link>
                   </NavDropdown.Item>
                   <NavDropdown.Divider />
-                  <NavDropdown.Item onClick={handleLogout}>
+                  <NavDropdown.Item>
                     Sign out
                   </NavDropdown.Item>
                 </NavDropdown>
