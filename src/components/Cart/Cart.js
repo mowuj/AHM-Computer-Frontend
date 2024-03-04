@@ -98,6 +98,9 @@ const  [cartItems, totalAmount]  = useCartItems();
       
     }
   };
+ const toggleOrderInputModal = () => {
+   setShowOrderInput(!showOrderInput);
+ };
 
   return (
     <>
@@ -149,14 +152,46 @@ const  [cartItems, totalAmount]  = useCartItems();
         <hr />
         <div className="my-2 text-right">
           <button
+            type="button"
             className="btn btn-primary"
-            onClick={() => setShowOrderInput(true)}
+            onClick={toggleOrderInputModal}
           >
             Order Now
           </button>
         </div>
 
-        {showOrderInput && <OrderInput onOrderSubmit={handleOrderNow} />}
+        {/* Bootstrap OrderInput Modal */}
+        <div
+          className={`modal ${showOrderInput ? "show" : ""}`}
+          style={{ display: showOrderInput ? "block" : "none" }}
+          tabIndex="-1"
+          role="dialog"
+        >
+          <div className="modal-dialog">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title fs-5">Order Now</h5>
+                <button
+                  type="button"
+                  className="btn-close"
+                  onClick={toggleOrderInputModal}
+                  aria-label="Close"
+                ></button>
+              </div>
+              <div className="modal-body">
+                <OrderInput onOrderSubmit={handleOrderNow} />
+              </div>
+              
+            </div>
+          </div>
+        </div>
+
+        {showOrderInput && (
+          <div
+            className="modal-backdrop show"
+            style={{ display: "block" }}
+          ></div>
+        )}
       </div>
     </>
   );

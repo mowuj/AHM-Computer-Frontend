@@ -25,7 +25,7 @@ const OrderInput = ({ onOrderSubmit }) => {
   };
 
   return (
-    <div className="col-md-6">
+    <div className="col-md-12">
       <form onSubmit={handleSubmit} className="mt-4">
         <div className="mb-3">
           <label htmlFor="ordered_by" className="form-label">
