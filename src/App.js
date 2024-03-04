@@ -11,6 +11,7 @@ import Home from './components/Home/Home';
 import ProductDetails from './components/ProductDetail/ProductDetail';
 import Products from './components/Products/Products';
 import Cart from './components/Cart/Cart';
+import OrderInput from './components/OrderInput/OrderInput';
 
 function App() {
   return (
@@ -24,7 +25,14 @@ function App() {
         <Route path="contact" element={<Contact></Contact>}></Route>
         <Route path="login" element={<Login></Login>}></Route>
         <Route path="register" element={<Register></Register>}></Route>
-        <Route path='/product/:productId' element={<ProductDetails></ProductDetails>}></Route>
+        <Route
+          path="/product/:productId"
+          element={<ProductDetails></ProductDetails>}
+        ></Route>
+        <Route
+          path="/order-confirmation"
+          element={<OrderInput></OrderInput>}
+        ></Route>
       </Routes>
       <Footer></Footer>
     </>

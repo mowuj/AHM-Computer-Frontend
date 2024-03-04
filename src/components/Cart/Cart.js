@@ -1,15 +1,102 @@
 import React, { useEffect, useState } from "react";
 import useCartItems from "../../hooks/useCartItems";
-
+import OrderInput from "../OrderInput/OrderInput";
+import { useNavigate } from "react-router-dom";
 const Cart = () => {
+    const [showOrderInput, setShowOrderInput] = useState(false);
+  const navigate = useNavigate(); 
 const  [cartItems, totalAmount]  = useCartItems();
-
   const handleDelete = (productId) => {
     // Your existing delete logic remains the same
   };
 
-  const handleOrderNow = () => {
-    // Your existing order now logic remains the same
+  const removeCartProducts = async (cartId) => {
+    try {
+      const cartProductResponse = await fetch(
+        `https://ahm-computer-backend.onrender.com/cart/list/${cartId}/`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      // Check if cart product removal was successful
+      if (!cartProductResponse.ok) {
+        const errorData = await cartProductResponse.text();
+        console.error("Cart Product Deletion Error:", errorData);
+        throw new Error("Error removing cart products");
+      }
+
+      console.log("Cart products removed successfully");
+
+      return true; // Indicate success if needed
+    } catch (error) {
+      console.error("Error removing cart products:", error);
+      throw error; // Re-throw the error if needed
+    }
+  };
+
+
+  const handleOrderNow = async (orderFormData) => {
+    try {
+      // Retrieve customer data from local storage
+      const customer = JSON.parse(localStorage.getItem("customer_id"));
+      const cartId = JSON.parse(localStorage.getItem("cartId"));
+
+      // Step 1: Prepare order data
+      const formattedOrderData = {
+        customer: customer,
+        ordered_by: orderFormData.ordered_by,
+        phone: orderFormData.phone,
+        email: orderFormData.email,
+        shipping_address: orderFormData.shipping_address,
+        city: orderFormData.city,
+        total: totalAmount,
+        order_status: orderFormData.order_status,
+        payment_method: orderFormData.payment_method,
+        payment_completed: false,
+      };
+
+      // Log the order data before making the fetch request
+      console.log("Order data to be sent:", formattedOrderData);
+
+      // Step 2: Send order data to the server
+      const orderResponse = await fetch(
+        "https://ahm-computer-backend.onrender.com/order/",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formattedOrderData),
+        }
+      );
+
+      if (!orderResponse.ok) {
+        const errorData = await orderResponse.text();
+        console.error("Order Placement Error:", errorData);
+        throw new Error("Error placing order");
+      }
+
+      console.log("Order placed successfully:", formattedOrderData);
+
+      const cartProductRemoved = await removeCartProducts(cartId);
+
+      if (!cartProductRemoved) {
+        throw new Error("Error removing cart products");
+      }
+
+      console.log("Cart products removed successfully");
+
+      localStorage.removeItem("cartId");
+
+      navigate("/order-confirmation");
+    } catch (error) {
+      console.error("Error placing order:", error);
+      
+    }
   };
 
   return (
@@ -61,10 +148,15 @@ const  [cartItems, totalAmount]  = useCartItems();
         </table>
         <hr />
         <div className="my-2 text-right">
-          <button className="btn btn-primary" onClick={handleOrderNow}>
+          <button
+            className="btn btn-primary"
+            onClick={() => setShowOrderInput(true)}
+          >
             Order Now
           </button>
         </div>
+
+        {showOrderInput && <OrderInput onOrderSubmit={handleOrderNow} />}
       </div>
     </>
   );
