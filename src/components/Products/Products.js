@@ -85,7 +85,6 @@ const Products = () => {
     }
   };
 
-
   const handleBrandClick = (brand) => {
     setSelectedBrand(brand);
     setSelectedCategory(null);

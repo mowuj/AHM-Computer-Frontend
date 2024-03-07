@@ -1,19 +1,19 @@
 import React, { useState } from "react";
 
-const OrderInput = ({ onOrderSubmit }) => {
-  const [orderData, setOrderData] = useState({
+const Shipment = ({ onOrderSubmit }) => {
+  const [shipmentData, setShipmentData] = useState({
     ordered_by: "",
     phone: "",
     email: "",
     shipping_address: "",
     city: "",
-    order_status: "Order Received", 
-    payment_method: "Cash On Delivery", 
+    order_status: "Order Received",
+    payment_method: "Cash On Delivery",
   });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setOrderData((prevData) => ({
+    setShipmentData((prevData) => ({
       ...prevData,
       [name]: value,
     }));
@@ -21,7 +21,7 @@ const OrderInput = ({ onOrderSubmit }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onOrderSubmit(orderData);
+    onOrderSubmit(shipmentData);
   };
 
   return (
@@ -34,7 +34,7 @@ const OrderInput = ({ onOrderSubmit }) => {
           <input
             type="text"
             name="ordered_by"
-            value={orderData.ordered_by}
+            value={shipmentData.ordered_by}
             onChange={handleChange}
             className="form-control"
             required
@@ -48,7 +48,7 @@ const OrderInput = ({ onOrderSubmit }) => {
           <input
             type="text"
             name="phone"
-            value={orderData.phone}
+            value={shipmentData.phone}
             onChange={handleChange}
             className="form-control"
             required
@@ -62,7 +62,7 @@ const OrderInput = ({ onOrderSubmit }) => {
           <input
             type="email"
             name="email"
-            value={orderData.email}
+            value={shipmentData.email}
             onChange={handleChange}
             className="form-control"
             required
@@ -76,7 +76,7 @@ const OrderInput = ({ onOrderSubmit }) => {
           <input
             type="text"
             name="shipping_address"
-            value={orderData.shipping_address}
+            value={shipmentData.shipping_address}
             onChange={handleChange}
             className="form-control"
             required
@@ -90,7 +90,7 @@ const OrderInput = ({ onOrderSubmit }) => {
           <input
             type="text"
             name="city"
-            value={orderData.city}
+            value={shipmentData.city}
             onChange={handleChange}
             className="form-control"
             required
@@ -103,7 +103,7 @@ const OrderInput = ({ onOrderSubmit }) => {
           </label>
           <select
             name="payment_method"
-            value={orderData.payment_method}
+            value={shipmentData.payment_method}
             onChange={handleChange}
             className="form-select"
             required
@@ -122,4 +122,4 @@ const OrderInput = ({ onOrderSubmit }) => {
   );
 };
 
-export default OrderInput;
+export default Shipment;

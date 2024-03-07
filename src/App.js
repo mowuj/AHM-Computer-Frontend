@@ -11,9 +11,9 @@ import Home from './components/Home/Home';
 import ProductDetails from './components/ProductDetail/ProductDetail';
 import Products from './components/Products/Products';
 import Cart from './components/Cart/Cart';
-import OrderInput from './components/OrderInput/OrderInput';
 import UserProfile from './components/UserProfile/UserProfile';
 import AdminDashboard from './components/AdminDashboard/AdminDashboard';
+import Shipment from './components/Shipment/Shipment'
 
 function App() {
   return (
@@ -35,7 +35,7 @@ function App() {
         ></Route>
         <Route
           path="/order-confirmation"
-          element={<OrderInput></OrderInput>}
+          element={<Shipment></Shipment>}
         ></Route>
       </Routes>
       <Footer></Footer>

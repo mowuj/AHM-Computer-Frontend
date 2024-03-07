@@ -11,7 +11,6 @@ const AdminDashboard = () => {
       <div>
         <div className="container-fluid">
           <div className="row">
-            {/* Main Sidebar */}
             <nav
               id="sidebar"
               className="col-md-3 col-lg-2 d-md-block bg-light sidebar"
@@ -42,18 +41,16 @@ const AdminDashboard = () => {
                       </ul>
                     </div>
                   </li>
-                  {/* Add more sidebar items as needed */}
+                  
                 </ul>
               </div>
             </nav>
 
-            {/* Main content area */}
             <main role="main" className="col-md-9 ml-sm-auto col-lg-10 px-md-4">
               <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                 <h1 className="h2">Dashboard</h1>
               </div>
 
-              {/* Your content goes here */}
             </main>
           </div>
         </div>
