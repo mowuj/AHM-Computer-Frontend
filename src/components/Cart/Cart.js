@@ -3,12 +3,11 @@ import useCartItems from "../../hooks/useCartItems";
 import OrderInput from "../OrderInput/OrderInput";
 import { useNavigate } from "react-router-dom";
 const Cart = () => {
-    const [showOrderInput, setShowOrderInput] = useState(false);
-  const navigate = useNavigate(); 
-const  [cartItems, totalAmount]  = useCartItems();
-  const handleDelete = (productId) => {
-    // Your existing delete logic remains the same
-  };
+  const [showOrderInput, setShowOrderInput] = useState(false);
+  const[loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+  const [cartItems, totalAmount] = useCartItems();
+  const handleDelete = (productId) => {};
 
   const removeCartProducts = async (cartId) => {
     try {
@@ -22,7 +21,6 @@ const  [cartItems, totalAmount]  = useCartItems();
         }
       );
 
-      // Check if cart product removal was successful
       if (!cartProductResponse.ok) {
         const errorData = await cartProductResponse.text();
         console.error("Cart Product Deletion Error:", errorData);
@@ -31,38 +29,32 @@ const  [cartItems, totalAmount]  = useCartItems();
 
       console.log("Cart products removed successfully");
 
-      return true; // Indicate success if needed
+      return true;
     } catch (error) {
       console.error("Error removing cart products:", error);
-      throw error; // Re-throw the error if needed
+      throw error;
     }
   };
 
-
-  const handleOrderNow = async (orderFormData) => {
+  const handleOrderNow = async () => {
     try {
-      // Retrieve customer data from local storage
+      setLoading(true);
       const customer = JSON.parse(localStorage.getItem("customer_id"));
       const cartId = JSON.parse(localStorage.getItem("cartId"));
 
-      // Step 1: Prepare order data
-      const formattedOrderData = {
-        customer: customer,
-        ordered_by: orderFormData.ordered_by,
-        phone: orderFormData.phone,
-        email: orderFormData.email,
-        shipping_address: orderFormData.shipping_address,
-        city: orderFormData.city,
-        total: totalAmount,
-        order_status: orderFormData.order_status,
-        payment_method: orderFormData.payment_method,
-        payment_completed: false,
+      const cartResponse = await fetch(
+        `https://ahm-computer-backend.onrender.com/cart/list/${cartId}/`
+      );
+      const cartData = await cartResponse.json();
+
+      const orderData = {
+        ordered_by: customer,
+        total_amount: cartData.total,
+        order_status: "Order Received",
       };
 
-      // Log the order data before making the fetch request
-      console.log("Order data to be sent:", formattedOrderData);
+      console.log("Order data to be sent:", orderData);
 
-      // Step 2: Send order data to the server
       const orderResponse = await fetch(
         "https://ahm-computer-backend.onrender.com/order/",
         {
@@ -70,17 +62,17 @@ const  [cartItems, totalAmount]  = useCartItems();
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(formattedOrderData),
+          body: JSON.stringify(orderData),
         }
       );
 
       if (!orderResponse.ok) {
         const errorData = await orderResponse.text();
         console.error("Order Placement Error:", errorData);
+        console.log("Error details:", errorData);
         throw new Error("Error placing order");
       }
-
-      console.log("Order placed successfully:", formattedOrderData);
+      console.log("Order placed successfully:", orderData);
 
       const cartProductRemoved = await removeCartProducts(cartId);
 
@@ -91,16 +83,19 @@ const  [cartItems, totalAmount]  = useCartItems();
       console.log("Cart products removed successfully");
 
       localStorage.removeItem("cartId");
+      localStorage.removeItem("product");
 
       navigate("/order-confirmation");
     } catch (error) {
       console.error("Error placing order:", error);
-      
+    } finally {
+      setLoading(false);
     }
   };
- const toggleOrderInputModal = () => {
-   setShowOrderInput(!showOrderInput);
- };
+
+  const toggleOrderInputModal = () => {
+    setShowOrderInput(!showOrderInput);
+  };
 
   return (
     <>
@@ -141,7 +136,6 @@ const  [cartItems, totalAmount]  = useCartItems();
                 </td>
               </tr>
             )}
-            {/* Total Price Row */}
             <tr>
               <td colSpan="2"></td>
               <td className="fs-5">Total Price:</td>
@@ -154,13 +148,13 @@ const  [cartItems, totalAmount]  = useCartItems();
           <button
             type="button"
             className="btn btn-primary"
-            onClick={toggleOrderInputModal}
+            onClick={handleOrderNow}
+            disabled={loading}
           >
-            Order Now
+            {loading ? "Placing Order..." : "Order Now"}
           </button>
         </div>
 
-        {/* Bootstrap OrderInput Modal */}
         <div
           className={`modal ${showOrderInput ? "show" : ""}`}
           style={{ display: showOrderInput ? "block" : "none" }}
@@ -181,7 +175,6 @@ const  [cartItems, totalAmount]  = useCartItems();
               <div className="modal-body">
                 <OrderInput onOrderSubmit={handleOrderNow} />
               </div>
-              
             </div>
           </div>
         </div>

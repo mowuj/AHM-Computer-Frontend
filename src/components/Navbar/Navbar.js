@@ -6,9 +6,12 @@ import { CiUser } from "react-icons/ci";
 const Nav = () => {
     const [profile, setProfile] = useState([]);
     const customer_id = localStorage.getItem("customer_id");
+    const userId = localStorage.getItem("user_id");
 
     useEffect(() => {
-      fetch(`https://ahm-computer-backend.onrender.com/customer/data/${customer_id}`)
+      fetch(
+        `https://ahm-computer-backend.onrender.com/customer/data/${customer_id}/`
+      )
         .then((res) => res.json())
         .then((data) => setProfile(data));
     }, []);
@@ -17,27 +20,25 @@ const Nav = () => {
 
     useEffect(() => {
       const token = localStorage.getItem("token");
-      const customer_id = localStorage.getItem("customer_id");
-      setUser(customer_id);
-    },[]);
+      const user_id = localStorage.getItem("user_id");
+      console.log(token, user_id);
+      setUser(user_id);
+    });
 
-const handleLogout = () => {
-  fetch("https://ahm-computer-backend.onrender.com/customer/logout/", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-  })
-    .then((res) => res.json())
-    .then((data) => {
-      console.log(data); 
+    const handleLogout = () => {
+      fetch("tps://ahm-computer-backend.onrender.com/customer/logout", {
+        method: "GET",
+        headers: { "content-type": "application/json" },
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data);
+        });
+
       localStorage.removeItem("token");
       localStorage.removeItem("user_id");
       window.location.reload();
-    })
-    .catch((error) => {
-      console.error("Logout error:", error);
-      // Handle error, e.g., show a message to the user
-    });
-};
+    };
 
 
     const [navClicked, setNavClicked] = useState(true);
@@ -101,20 +102,20 @@ const handleLogout = () => {
                   id="basic-nav-dropdown"
                 >
                   <NavDropdown.Header>
-                    <span className="block text-sm">
-                      
-                    </span>
-                    <span className="block truncate text-sm font-medium">
-                      
-                    </span>
+                    <span className="block text-sm"></span>
+                    <span className="block truncate text-sm font-medium"></span>
                   </NavDropdown.Header>
                   <NavDropdown.Item>
-                    
                     <CiUser className="mr-2" />
                     <Link to={"/dashboard"}>Dashboard</Link>
                   </NavDropdown.Item>
                   <NavDropdown.Divider />
                   <NavDropdown.Item>
+                    <CiUser className="mr-2" />
+                    <Link to={"/profile"}>Profile</Link>
+                  </NavDropdown.Item>
+                  <NavDropdown.Divider />
+                  <NavDropdown.Item onClick={handleLogout}>
                     Sign out
                   </NavDropdown.Item>
                 </NavDropdown>

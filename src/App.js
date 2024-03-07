@@ -12,6 +12,8 @@ import ProductDetails from './components/ProductDetail/ProductDetail';
 import Products from './components/Products/Products';
 import Cart from './components/Cart/Cart';
 import OrderInput from './components/OrderInput/OrderInput';
+import UserProfile from './components/UserProfile/UserProfile';
+import AdminDashboard from './components/AdminDashboard/AdminDashboard';
 
 function App() {
   return (
@@ -25,6 +27,8 @@ function App() {
         <Route path="contact" element={<Contact></Contact>}></Route>
         <Route path="login" element={<Login></Login>}></Route>
         <Route path="register" element={<Register></Register>}></Route>
+        <Route path="profile" element={<UserProfile></UserProfile>}></Route>
+        <Route path="admin-dashboard" element={<AdminDashboard></AdminDashboard>}></Route>
         <Route
           path="/product/:productId"
           element={<ProductDetails></ProductDetails>}

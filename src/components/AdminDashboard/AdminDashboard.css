@@ -1,0 +1,8 @@
+ #sidebar .collapse.show {
+     position: relative;
+     z-index: 1;
+ }
+
+ #sidebar .collapse:not(.show) {
+     display: none;
+ }

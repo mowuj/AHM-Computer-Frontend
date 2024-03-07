@@ -45,7 +45,6 @@ const Products = () => {
           console.log(cartId)
           localStorage.setItem("cartId", cartId);
       }
-
       const cartProductResponse = await fetch(
         "https://ahm-computer-backend.onrender.com/cart/cartProduct/",
         {
