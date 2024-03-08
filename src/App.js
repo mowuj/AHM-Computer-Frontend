@@ -12,8 +12,12 @@ import ProductDetails from './components/ProductDetail/ProductDetail';
 import Products from './components/Products/Products';
 import Cart from './components/Cart/Cart';
 import UserProfile from './components/UserProfile/UserProfile';
-import AdminDashboard from './components/AdminDashboard/AdminDashboard';
+
 import Shipment from './components/Shipment/Shipment'
+import AdminDashboard from './components/Admin/AdminDashboard/AdminDashboard';
+import AddBrand from './components/Admin/AddBrand/AddBrand';
+import AddCategory from './components/Admin/AddCategory/AddCategory';
+import AddProduct from './components/Admin/AddProduct/AddProduct';
 
 function App() {
   return (
@@ -28,15 +32,25 @@ function App() {
         <Route path="login" element={<Login></Login>}></Route>
         <Route path="register" element={<Register></Register>}></Route>
         <Route path="profile" element={<UserProfile></UserProfile>}></Route>
-        <Route path="admin-dashboard" element={<AdminDashboard></AdminDashboard>}></Route>
+
         <Route
           path="/product/:productId"
           element={<ProductDetails></ProductDetails>}
         ></Route>
+        <Route path="/shipment" element={<Shipment></Shipment>}></Route>
+
         <Route
-          path="/order-confirmation"
-          element={<Shipment></Shipment>}
-        ></Route>
+          path="/admin-dashboard"
+          element={<AdminDashboard></AdminDashboard>}
+        >
+          <Route path="add-brand" element={<AddBrand></AddBrand>}></Route>
+          <Route
+            path="add-category"
+            element={<AddCategory></AddCategory>}
+          ></Route>
+          <Route path="add-product" element={<AddProduct></AddProduct>}></Route>
+
+        </Route>
       </Routes>
       <Footer></Footer>
     </>

@@ -37,6 +37,7 @@ const Nav = () => {
 
       localStorage.removeItem("token");
       localStorage.removeItem("user_id");
+      localStorage.removeItem("customer_id");
       window.location.reload();
     };
 
