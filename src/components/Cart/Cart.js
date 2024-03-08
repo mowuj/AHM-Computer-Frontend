@@ -11,7 +11,33 @@ const Cart = () => {
   const [cartItems, totalAmount] = useCartItems();
   const [showOrderInput, setShowOrderInput] = useState(false);
   const handleDelete = (productId) => { };
-  
+
+const removeCartProducts = async (cartId) => {
+  try {
+    const cartProductResponse = await fetch(
+      `https://ahm-computer-backend.onrender.com/cart/list/${cartId}/`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    if (!cartProductResponse.ok) {
+      const errorData = await cartProductResponse.text();
+      console.error("Cart Product Deletion Error:", errorData);
+      throw new Error("Error removing cart products");
+    }
+
+    console.log("Cart products removed successfully");
+
+    return true;
+  } catch (error) {
+    console.error("Error removing cart products:", error);
+    throw error;
+  }
+};
 const handleShipmentSubmit = async (shipmentData) => {
   try {
     const order_id = JSON.parse(localStorage.getItem("order_id"));
@@ -36,105 +62,116 @@ const handleShipmentSubmit = async (shipmentData) => {
     );
 
     if (!response.ok) {
-      navigate('/profile');
+      
       const errorData = await response.text();
       console.error("Shipment Error:", errorData);
       throw new Error("Error submitting shipment");
     }
+    const cartId = JSON.parse(localStorage.getItem("cartId"));
+    const cartProductRemoved = await removeCartProducts(cartId);
+         localStorage.removeItem("cartId");
+         localStorage.removeItem("product");
 
+    if (!cartProductRemoved) {
+      throw new Error("Error removing cart products");
+    }
+
+    console.log("Cart products removed successfully");
+    navigate("/profile");
     console.log("Shipment submitted successfully");
   } catch (error) {
     console.error("Error submitting shipment:", error);
   }
 };
 
-  const removeCartProducts = async (cartId) => {
-    try {
-      const cartProductResponse = await fetch(
-        `https://ahm-computer-backend.onrender.com/cart/list/${cartId}/`,
-        {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+  
 
-      if (!cartProductResponse.ok) {
-        const errorData = await cartProductResponse.text();
-        console.error("Cart Product Deletion Error:", errorData);
-        throw new Error("Error removing cart products");
-      }
+     const handleOrderNow = async () => {
+       try {
+         setLoading(true);
+         const customer = JSON.parse(localStorage.getItem("customer_id"));
+         const cartId = JSON.parse(localStorage.getItem("cartId"));
 
-      console.log("Cart products removed successfully");
+         const cartResponse = await fetch(
+           `https://ahm-computer-backend.onrender.com/cart/list/${cartId}/`
+         );
+         const cartData = await cartResponse.json();
 
-      return true;
-    } catch (error) {
-      console.error("Error removing cart products:", error);
-      throw error;
-    }
-  };
+         const orderData = {
+           ordered_by: customer,
+           total_amount: cartData.total,
+           order_status: "Order Received",
+         };
 
-    const handleOrderNow = async () => {
-      try {
-        setLoading(true);
-        const customer = JSON.parse(localStorage.getItem("customer_id"));
-        const cartId = JSON.parse(localStorage.getItem("cartId"));
+         console.log("Order data to be sent:", orderData);
 
-        const cartResponse = await fetch(
-          `https://ahm-computer-backend.onrender.com/cart/list/${cartId}/`
-        );
-        const cartData = await cartResponse.json();
+         const orderResponse = await fetch(
+           "https://ahm-computer-backend.onrender.com/order/list/",
+           {
+             method: "POST",
+             headers: {
+               "Content-Type": "application/json",
+             },
+             body: JSON.stringify(orderData),
+           }
+         );
 
-        const orderData = {
-          ordered_by: customer,
-          total_amount: cartData.total,
-          order_status: "Order Received",
-        };
+         if (!orderResponse.ok) {
+           const errorData = await orderResponse.text();
+           console.error("Order Placement Error:", errorData);
+           throw new Error("Error placing order");
+         }
 
-        console.log("Order data to be sent:", orderData);
-
-        const orderResponse = await fetch(
-          "https://ahm-computer-backend.onrender.com/order/list/",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(orderData),
-          }
-        );
-
-        if (!orderResponse.ok) {
-          
-          const errorData = await orderResponse.text();
-          console.error("Order Placement Error:", errorData);
-          throw new Error("Error placing order");
-        }
          const orderResponseData = await orderResponse.json();
          localStorage.setItem("order_id", orderResponseData.id);
-        console.log("Order placed successfully:", orderData);
+         console.log("Order placed successfully:", orderData);
 
-        const cartProductRemoved = await removeCartProducts(cartId);
+         // Fetch the newly created order to get its ID
+         const orderDetailResponse = await fetch(
+           `https://ahm-computer-backend.onrender.com/order/list/${orderResponseData.id}/`
+         );
+         const orderDetailData = await orderDetailResponse.json();
 
-        if (!cartProductRemoved) {
-          throw new Error("Error removing cart products");
-        }
+         const cartProductsResponse = await fetch(
+           `https://ahm-computer-backend.onrender.com/cart/cartProduct/?cart=${cartId}/`
+         );
+         const cartProductsData = await cartProductsResponse.json();
 
-        console.log("Cart products removed successfully");
+         for (const cartProduct of cartProductsData) {
+           const orderProductData = {
+             order: orderDetailData.id,
+             product: cartProduct.product,
+             price: cartProduct.price,
+             quantity: cartProduct.quantity,
+             subtotal: cartProduct.subtotal,
+           };
+           console.log("Product ID:", cartProduct.product);
+           const orderProductResponse = await fetch(
+             "https://ahm-computer-backend.onrender.com/order/orderProduct/",
+             {
+               method: "POST",
+               headers: {
+                 "Content-Type": "application/json",
+               },
+               body: JSON.stringify(orderProductData),
+             }
+           );
 
-        localStorage.removeItem("cartId");
-        localStorage.removeItem("product");
+           if (!orderProductResponse.ok) {
+             const errorData = await orderProductResponse.text();
+             console.error("Order Product Creation Error:", errorData);
+             throw new Error("Error creating order products");
+           }
+         }
+         // Show Shipment modal after placing order
+         setShowOrderInput(true);
+       } catch (error) {
+         console.error("Error placing order:", error);
+       } finally {
+         setLoading(false);
+       }
+     };
 
-        // Show Shipment modal after placing order
-        
-        console.log("Setting showOrderInput to true");
-      } catch (error) {
-        console.error("Error placing order:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
 
 
   return (
