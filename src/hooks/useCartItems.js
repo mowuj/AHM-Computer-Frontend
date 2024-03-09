@@ -10,7 +10,6 @@ const useCartItems = () => {
         const cartId = localStorage.getItem("cartId");
 
         if (cartId) {
-          // Fetch the cart products based on the cartId
           const cartProductsResponse = await fetch(
             `https://ahm-computer-backend.onrender.com/cart/cartProduct/?cart=${cartId}`
           );
@@ -24,7 +23,6 @@ const useCartItems = () => {
           const cartProductsData = await cartProductsResponse.json();
           console.log("Cart Products Data:", cartProductsData);
 
-          // Fetch product details for each cart product
           const productDetailsPromises = cartProductsData.map((cartProduct) =>
             fetch(
               `https://ahm-computer-backend.onrender.com/product/list/${cartProduct.product}/`
@@ -33,7 +31,6 @@ const useCartItems = () => {
 
           const productDetails = await Promise.all(productDetailsPromises);
 
-          // Merge product details into cart product objects
           const cartItemsWithDetails = cartProductsData.map(
             (cartProduct, index) => ({
               ...cartProduct,
@@ -41,7 +38,6 @@ const useCartItems = () => {
             })
           );
 
-          // Calculate total amount
           const total = cartItemsWithDetails.reduce(
             (acc, item) => acc + item.subtotal,
             0

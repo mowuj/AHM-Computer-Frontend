@@ -19,6 +19,7 @@ import AddBrand from './components/Admin/AddBrand/AddBrand';
 import AddCategory from './components/Admin/AddCategory/AddCategory';
 import AddProduct from './components/Admin/AddProduct/AddProduct';
 import AllProduct from './components/Admin/AllProduct/AllProduct';
+import AllOrder from './components/Admin/AllOrder/AllOrder';
 
 function App() {
   return (
@@ -51,6 +52,7 @@ function App() {
           ></Route>
           <Route path="add-product" element={<AddProduct></AddProduct>}></Route>
           <Route path="all-product" element={<AllProduct></AllProduct>}></Route>
+          <Route path="all-order" element={<AllOrder></AllOrder>}></Route>
 
         </Route>
       </Routes>
