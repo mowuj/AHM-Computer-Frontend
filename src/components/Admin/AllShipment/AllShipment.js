@@ -21,7 +21,7 @@ const Shipment = () => {
   }, []);
 
   return (
-    <div className="container mt-4">
+    <div className="container">
       <h1 className="mb-4 text-center">Shipment Details</h1>
       <table className="table table-bordered">
         <thead className="thead-dark">

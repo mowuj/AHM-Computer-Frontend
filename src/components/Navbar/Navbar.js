@@ -108,7 +108,7 @@ const Nav = () => {
                   </NavDropdown.Header>
                   <NavDropdown.Item>
                     <CiUser className="mr-2" />
-                    <Link to={"/dashboard"}>Dashboard</Link>
+                    <Link to={"/customer-dashboard"}>Dashboard</Link>
                   </NavDropdown.Item>
                   <NavDropdown.Divider />
                   <NavDropdown.Item>

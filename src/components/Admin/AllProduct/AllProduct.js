@@ -1,9 +1,46 @@
-import React from 'react';
-import useProduct from '../../../hooks/useProduct';
+import React from "react";
+import useProduct from "../../../hooks/useProduct";
 
 const AllProduct = () => {
-    const [products, setProducts] = useProduct();
-    return (
+  const [products, setProducts] = useProduct();
+
+  const handleDeleteProduct = async (productId) => {
+    const isConfirmed = window.confirm(
+      "Are you sure you want to delete this product?"
+    );
+
+    if (isConfirmed) {
+      try {
+        const response = await fetch(
+          `https://ahm-computer-backend.onrender.com/product/list/${productId}/`,
+          {
+            method: "DELETE",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        if (response.ok) {
+
+          const updatedProducts = products.filter(
+            (product) => product.id !== productId
+          );
+          setProducts(updatedProducts);
+          console.log("Product deleted successfully!");
+        } else {
+          console.error("Failed to delete product");
+        }
+      } catch (error) {
+        console.error("Error deleting product:", error);
+      }
+    }
+  };
+
+
+  return (
+    <>
+      <h1 className="text-center mb-3">All Product</h1>
       <div style={{ height: "100vh" }}>
         <table className="table">
           <thead>
@@ -37,14 +74,20 @@ const AllProduct = () => {
                   />
                 </td>
                 <td>
-                  <button className="btn btn-danger">Delete</button>
+                  <button
+                    className="btn btn-danger"
+                    onClick={() => handleDeleteProduct(product.id)}
+                  >
+                    Delete
+                  </button>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
-    );
+    </>
+  );
 };
 
 export default AllProduct;

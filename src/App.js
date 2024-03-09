@@ -21,6 +21,7 @@ import AddProduct from './components/Admin/AddProduct/AddProduct';
 import AllProduct from './components/Admin/AllProduct/AllProduct';
 import AllOrder from './components/Admin/AllOrder/AllOrder';
 import AllShipment from "./components/Admin/AllShipment/AllShipment";
+import CustomerDashboard from './components/CustomerDashBoard/CustomerDashboard';
 
 function App() {
   return (
@@ -35,6 +36,7 @@ function App() {
         <Route path="login" element={<Login></Login>}></Route>
         <Route path="register" element={<Register></Register>}></Route>
         <Route path="profile" element={<UserProfile></UserProfile>}></Route>
+        <Route path="customer-dashboard" element={<CustomerDashboard></CustomerDashboard>}></Route>
 
         <Route
           path="/product/:productId"

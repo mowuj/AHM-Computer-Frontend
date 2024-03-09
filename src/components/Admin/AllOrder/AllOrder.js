@@ -83,7 +83,7 @@ const AllOrder = () => {
   });
 
   return (
-    <div className="container mt-4">
+    <div className="container">
       <h1 className="text-center mb-3">All Orders</h1>
       <div className="btn-group mb-3">
         {orderStatusOptions.map((status) => (
