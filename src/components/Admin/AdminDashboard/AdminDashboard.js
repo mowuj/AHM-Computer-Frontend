@@ -19,19 +19,27 @@ const AdminDashboard = () => {
           >
             <div className="sidebar-sticky">
               <ul className="nav flex-column">
+                
                 <li className="nav-item">
-                  <Link to="/admin-dashboard" className="nav-link active">
-                    New Order
-                  </Link>
-                </li>
-                <li className="nav-item">
-                  <Link to="/admin-dashboard/all-product" className="nav-link active">
+                  <Link
+                    to="/admin-dashboard/all-product"
+                    className="nav-link active"
+                  >
                     All Product
                   </Link>
                 </li>
                 <li className="nav-item">
+                  <Link
+                    to="/admin-dashboard/all-order"
+                    className="nav-link active"
+                  >
+                    All Orders
+                  </Link>
+                </li>
+                
+                <li className="nav-item">
                   <a className="nav-link" onClick={handleSubMenuToggle}>
-                    Add New
+                    Products
                   </a>
                   <div className={`collapse ${isSubMenuOpen ? "show" : ""}`}>
                     <ul className="nav flex-column">
@@ -67,8 +75,7 @@ const AdminDashboard = () => {
           </nav>
 
           <main role="main" className="col-md-9 ml-sm-auto col-lg-10 px-md-4">
-            <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-            </div>
+            <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom"></div>
             <Outlet /> {/* Render nested routes */}
           </main>
         </div>

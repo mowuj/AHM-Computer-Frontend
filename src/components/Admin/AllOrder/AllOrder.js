@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
-import './AllOrder.css'
+
+import "./AllOrder.css";
+
 const AllOrder = () => {
   const [orders, setOrders] = useState([]);
+  const [selectedStatus, setSelectedStatus] = useState("Order Received");
   const [selectedOrderId, setSelectedOrderId] = useState(null);
   const [newOrderStatus, setNewOrderStatus] = useState("");
   const orderStatusOptions = [
     "Order Received",
-    "Order Processing",
-    "On the way",
     "Order Completed",
     "Order Canceled",
   ];
@@ -43,7 +44,6 @@ const AllOrder = () => {
     if (!selectedOrderId || !newOrderStatus) {
       return;
     }
-
     try {
       const response = await fetch(
         `https://ahm-computer-backend.onrender.com/order/list/${selectedOrderId}/`,
@@ -69,52 +69,80 @@ const AllOrder = () => {
     }
   };
 
+  const filteredOrders = orders.filter((order) => {
+    switch (selectedStatus) {
+      case "Order Received":
+        return order.order_status === "Order Received";
+      case "Order Completed":
+        return order.order_status === "Order Completed";
+      case "Order Canceled":
+        return order.order_status === "Order Canceled";
+      default:
+        return false;
+    }
+  });
+
   return (
     <div className="container mt-4">
-      <h1 className="mb-4">All Orders</h1>
+      <h1 className="text-center mb-3">All Orders</h1>
+      <div className="btn-group mb-3">
+        {orderStatusOptions.map((status) => (
+          <button
+            key={status}
+            type="button"
+            className={`btn ${selectedStatus === status ? "btn-primary" : "btn-secondary"}`}
+            onClick={() => setSelectedStatus(status)}
+          >
+            {status}
+          </button>
+        ))}
+      </div>
       <table className="table table-bordered bold-table-border">
+        {/* Render orders based on the selected status */}
         <thead className="thead-dark">
           <tr>
             <th>ID</th>
             <th>Total</th>
             <th>Status</th>
-            <th>Update Status</th>
+            {selectedStatus === "Order Received" && <th>Update Status</th>}
             <th>Order Products</th>
           </tr>
         </thead>
         <tbody>
-          {orders.map((order) => (
+          {filteredOrders.map((order) => (
             <tr key={order.id}>
               <td>{order.id}</td>
               <td>{order.total_amount}</td>
               <td>{order.order_status}</td>
-              <td>
-                <div>
-                  <select
-                    value={selectedOrderId === order.id ? newOrderStatus : ""}
-                    onChange={(e) => {
-                      setSelectedOrderId(order.id);
-                      setNewOrderStatus(e.target.value);
-                    }}
-                  >
-                    <option value="" disabled>
-                      Order Status
-                    </option>
-                    {orderStatusOptions.map((status) => (
-                      <option key={status} value={status}>
-                        {status}
+              {selectedStatus === "Order Received" && (
+                <td>
+                  <div>
+                    <select
+                      value={selectedOrderId === order.id ? newOrderStatus : ""}
+                      onChange={(e) => {
+                        setSelectedOrderId(order.id);
+                        setNewOrderStatus(e.target.value);
+                      }}
+                    >
+                      <option value="" disabled>
+                        Order Status
                       </option>
-                    ))}
-                  </select>
-                  <br />
-                  <button
-                    className="btn btn-primary ml-2"
-                    onClick={handleUpdateOrderStatus}
-                  >
-                    Update
-                  </button>
-                </div>
-              </td>
+                      {orderStatusOptions.map((status) => (
+                        <option key={status} value={status}>
+                          {status}
+                        </option>
+                      ))}
+                    </select>
+                    <br />
+                    <button
+                      className="btn btn-primary ml-2"
+                      onClick={handleUpdateOrderStatus}
+                    >
+                      Update
+                    </button>
+                  </div>
+                </td>
+              )}
               <td>
                 <table className="table">
                   <thead className="thead-light">
@@ -144,5 +172,6 @@ const AllOrder = () => {
     </div>
   );
 };
+
 
 export default AllOrder;
