@@ -19,7 +19,11 @@ const AdminDashboard = () => {
           >
             <div className="sidebar-sticky">
               <ul className="nav flex-column">
-                
+                <li className="nav-item">
+                  <Link to="/admin-dashboard" className="nav-link active">
+                    Dash Board
+                  </Link>
+                </li>
                 <li className="nav-item">
                   <Link
                     to="/admin-dashboard/all-product"
@@ -30,16 +34,16 @@ const AdminDashboard = () => {
                 </li>
                 <li className="nav-item">
                   <Link
-                    to="/admin-dashboard/all-order"
+                    to="/admin-dashboard/all-shipment"
                     className="nav-link active"
                   >
-                    All Orders
+                    All Shipment
                   </Link>
                 </li>
-                
+
                 <li className="nav-item">
                   <a className="nav-link" onClick={handleSubMenuToggle}>
-                    Products
+                    Add Products
                   </a>
                   <div className={`collapse ${isSubMenuOpen ? "show" : ""}`}>
                     <ul className="nav flex-column">

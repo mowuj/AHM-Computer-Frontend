@@ -20,6 +20,7 @@ import AddCategory from './components/Admin/AddCategory/AddCategory';
 import AddProduct from './components/Admin/AddProduct/AddProduct';
 import AllProduct from './components/Admin/AllProduct/AllProduct';
 import AllOrder from './components/Admin/AllOrder/AllOrder';
+import AllShipment from "./components/Admin/AllShipment/AllShipment";
 
 function App() {
   return (
@@ -45,6 +46,7 @@ function App() {
           path="/admin-dashboard"
           element={<AdminDashboard></AdminDashboard>}
         >
+          <Route index element={<AllOrder></AllOrder>}></Route>
           <Route path="add-brand" element={<AddBrand></AddBrand>}></Route>
           <Route
             path="add-category"
@@ -52,8 +54,8 @@ function App() {
           ></Route>
           <Route path="add-product" element={<AddProduct></AddProduct>}></Route>
           <Route path="all-product" element={<AllProduct></AllProduct>}></Route>
-          <Route path="all-order" element={<AllOrder></AllOrder>}></Route>
-
+          <Route path="all-shipment" element={<AllShipment></AllShipment>}></Route>
+          
         </Route>
       </Routes>
       <Footer></Footer>
