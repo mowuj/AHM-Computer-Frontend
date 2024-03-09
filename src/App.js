@@ -18,13 +18,14 @@ import AdminDashboard from './components/Admin/AdminDashboard/AdminDashboard';
 import AddBrand from './components/Admin/AddBrand/AddBrand';
 import AddCategory from './components/Admin/AddCategory/AddCategory';
 import AddProduct from './components/Admin/AddProduct/AddProduct';
+import AllProduct from './components/Admin/AllProduct/AllProduct';
 
 function App() {
   return (
     <>
       <Nav></Nav>
       <Routes>
-        <Route path="home" element={<Home></Home>}></Route>
+        <Route path="/" element={<Home></Home>}></Route>
         <Route path="products" element={<Products></Products>}></Route>
         <Route path="cart" element={<Cart></Cart>}></Route>
         <Route path="about" element={<About></About>}></Route>
@@ -49,6 +50,7 @@ function App() {
             element={<AddCategory></AddCategory>}
           ></Route>
           <Route path="add-product" element={<AddProduct></AddProduct>}></Route>
+          <Route path="all-product" element={<AllProduct></AllProduct>}></Route>
 
         </Route>
       </Routes>

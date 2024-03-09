@@ -21,7 +21,12 @@ const AdminDashboard = () => {
               <ul className="nav flex-column">
                 <li className="nav-item">
                   <Link to="/admin-dashboard" className="nav-link active">
-                    Dashboard
+                    New Order
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link to="/admin-dashboard/all-product" className="nav-link active">
+                    All Product
                   </Link>
                 </li>
                 <li className="nav-item">

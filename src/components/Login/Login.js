@@ -27,21 +27,29 @@ const Login = () => {
           return response.json();
         })
         .then((data) => {
-          console.log("Signup successful:", data);
+          console.log("Login successful:", data);
 
           localStorage.setItem("token", data.token);
           localStorage.setItem("user_id", data.user_id);
           localStorage.setItem("customer_id", data.customer_id);
-          navigate("/");
+
+          if (data.isStaff) {
+
+            navigate("/admin-dashboard");
+          } else {
+            
+            navigate("/");
+          }
+
           window.location.reload();
-          alert("Signup successful!");
+          alert("Login successful!");
         })
         .catch((error) => {
-          console.error("Error during signup:", error);
-          // Provide appropriate feedback to the user if signup fails
-          alert("Signup failed. Please try again later.");
+          console.error("Error during login:", error);
+          alert("Login failed. Please try again later.");
         });
     };
+
 
     function getCookie(name) {
       const cookieValue = document.cookie.match(
