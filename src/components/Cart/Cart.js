@@ -77,7 +77,6 @@ const handleShipmentSubmit = async (shipmentData) => {
     }
 
     console.log("Cart products removed successfully");
-    navigate("/profile");
     console.log("Shipment submitted successfully");
   } catch (error) {
     console.error("Error submitting shipment:", error);
@@ -163,7 +162,7 @@ const handleShipmentSubmit = async (shipmentData) => {
              throw new Error("Error creating order products");
            }
          }
-         // Show Shipment modal after placing order
+
          setShowOrderInput(true);
        } catch (error) {
          console.error("Error placing order:", error);
@@ -224,7 +223,7 @@ const handleShipmentSubmit = async (shipmentData) => {
         <div className="my-2 text-right">
           <button
             onClick={() => {
-              handleOrderNow()
+              handleOrderNow();
               setShowOrderInput(true);
             }}
             type="button"
@@ -239,7 +238,10 @@ const handleShipmentSubmit = async (shipmentData) => {
             <Modal.Title className="fs-5">Order Now</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <Shipment onOrderSubmit={handleShipmentSubmit} />
+            <Shipment
+              onOrderSubmit={handleShipmentSubmit}
+              setShowOrderInput={setShowOrderInput}
+            />
           </Modal.Body>
         </Modal>
       </div>

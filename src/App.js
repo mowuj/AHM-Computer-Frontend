@@ -22,6 +22,8 @@ import AllProduct from './components/Admin/AllProduct/AllProduct';
 import AllOrder from './components/Admin/AllOrder/AllOrder';
 import AllShipment from "./components/Admin/AllShipment/AllShipment";
 import CustomerDashboard from './components/CustomerDashBoard/CustomerDashboard';
+import RequireAuth from './components/RequireAuth/RequireAuth';
+import RequireAdmin from './components/RequireAdmin/RequireAdmin';
 
 function App() {
   return (
@@ -30,34 +32,109 @@ function App() {
       <Routes>
         <Route path="/" element={<Home></Home>}></Route>
         <Route path="products" element={<Products></Products>}></Route>
-        <Route path="cart" element={<Cart></Cart>}></Route>
+
         <Route path="about" element={<About></About>}></Route>
         <Route path="contact" element={<Contact></Contact>}></Route>
         <Route path="login" element={<Login></Login>}></Route>
         <Route path="register" element={<Register></Register>}></Route>
-        <Route path="profile" element={<UserProfile></UserProfile>}></Route>
-        <Route path="customer-dashboard" element={<CustomerDashboard></CustomerDashboard>}></Route>
+        <Route
+          path="profile"
+          element={
+            <RequireAuth>
+              <UserProfile></UserProfile>
+            </RequireAuth>
+          }
+        ></Route>
+        <Route
+          path="cart"
+          element={
+            <RequireAuth>
+              <Cart></Cart>
+            </RequireAuth>
+          }
+        ></Route>
+        <Route
+          path="customer-dashboard"
+          element={
+            <RequireAuth>
+              <CustomerDashboard></CustomerDashboard>
+            </RequireAuth>
+          }
+        ></Route>
 
         <Route
           path="/product/:productId"
-          element={<ProductDetails></ProductDetails>}
+          element={
+            <RequireAuth>
+              <ProductDetails></ProductDetails>
+            </RequireAuth>
+          }
         ></Route>
-        <Route path="/shipment" element={<Shipment></Shipment>}></Route>
+        <Route
+          path="/shipment"
+          element={
+            <RequireAuth>
+              <Shipment></Shipment>
+            </RequireAuth>
+          }
+        ></Route>
 
         <Route
           path="/admin-dashboard"
-          element={<AdminDashboard></AdminDashboard>}
+          element={
+            <RequireAdmin>
+              <AdminDashboard></AdminDashboard>
+            </RequireAdmin>
+          }
         >
-          <Route index element={<AllOrder></AllOrder>}></Route>
-          <Route path="add-brand" element={<AddBrand></AddBrand>}></Route>
+          <Route
+            index
+            element={
+              <RequireAdmin>
+                <AllOrder></AllOrder>
+              </RequireAdmin>
+            }
+          ></Route>
+          <Route
+            path="add-brand"
+            element={
+              <RequireAdmin>
+                <AddBrand></AddBrand>
+              </RequireAdmin>
+            }
+          ></Route>
           <Route
             path="add-category"
-            element={<AddCategory></AddCategory>}
+            element={
+              <RequireAdmin>
+                <AddCategory></AddCategory>
+              </RequireAdmin>
+            }
           ></Route>
-          <Route path="add-product" element={<AddProduct></AddProduct>}></Route>
-          <Route path="all-product" element={<AllProduct></AllProduct>}></Route>
-          <Route path="all-shipment" element={<AllShipment></AllShipment>}></Route>
-          
+          <Route
+            path="add-product"
+            element={
+              <RequireAdmin>
+                <AddProduct></AddProduct>
+              </RequireAdmin>
+            }
+          ></Route>
+          <Route
+            path="all-product"
+            element={
+              <RequireAdmin>
+                <AllProduct></AllProduct>
+              </RequireAdmin>
+            }
+          ></Route>
+          <Route
+            path="all-shipment"
+            element={
+              <RequireAdmin>
+                <AllShipment></AllShipment>
+              </RequireAdmin>
+            }
+          ></Route>
         </Route>
       </Routes>
       <Footer></Footer>

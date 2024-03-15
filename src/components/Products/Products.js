@@ -22,7 +22,6 @@ const Products = () => {
       const isItemInCart = cartItems.some((item) => item.id === product.id);
 
       let cartId = localStorage.getItem("cartId");
-
       if (!cartId) {
         const cartResponse = await fetch(
           "https://ahm-computer-backend.onrender.com/cart/list/",
@@ -40,11 +39,12 @@ const Products = () => {
 
         const cartData = await cartResponse.json();
         console.log("Cart creation API response:", cartData);
-    
-          cartId = cartData.id;
-          console.log(cartId)
-          localStorage.setItem("cartId", cartId);
+
+        cartId = cartData.id;
+        console.log(cartId);
+        localStorage.setItem("cartId", cartId);
       }
+
       const cartProductResponse = await fetch(
         "https://ahm-computer-backend.onrender.com/cart/cartProduct/",
         {
@@ -65,6 +65,8 @@ const Products = () => {
       const productData = await cartProductResponse.json();
       console.log("Product added to the cartProduct API:", productData);
 
+      let totalSubtotal = productData.subtotal;
+
       if (isItemInCart) {
         const updatedCartItems = cartItems.map((item) =>
           item.id === product.id
@@ -78,11 +80,32 @@ const Products = () => {
         localStorage.setItem("product", JSON.stringify(updatedCartItems));
         toast.success("Item added to the cart successfully!");
       }
+
+      // Wait for both product addition and totalSubtotal calculation
+      await Promise.all([updateCartTotal(cartId, totalSubtotal)]);
     } catch (error) {
       console.error("Error in handleaddtocart:", error);
-
       toast.error("Failed to add item to the cart");
     }
+  };
+
+  const updateCartTotal = async (cartId, totalSubtotal) => {
+    // Update the cart total in the cart POST request
+    const updatedCartResponse = await fetch(
+      `https://ahm-computer-backend.onrender.com/cart/list/${cartId}/`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          total: totalSubtotal,
+        }),
+      }
+    );
+
+    const updatedCartData = await updatedCartResponse.json();
+    console.log("Updated cart total:", updatedCartData);
   };
 
   const handleBrandClick = (brand) => {

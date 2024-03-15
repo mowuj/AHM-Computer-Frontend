@@ -7,7 +7,6 @@ const Cart = () => {
   const navigate = useNavigate();
   const [cartItems, totalAmount] = useCartItems();
   const handleDelete = (productId) => {
-    // Your existing delete logic remains the same
   };
 
   const removeCartProducts = async (cartId) => {
@@ -22,7 +21,6 @@ const Cart = () => {
         }
       );
 
-      // Check if cart product removal was successful
       if (!cartProductResponse.ok) {
         const errorData = await cartProductResponse.text();
         console.error("Cart Product Deletion Error:", errorData);
@@ -31,10 +29,10 @@ const Cart = () => {
 
       console.log("Cart products removed successfully");
 
-      return true; // Indicate success if needed
+      return true;
     } catch (error) {
       console.error("Error removing cart products:", error);
-      throw error; // Re-throw the error if needed
+      throw error;
     }
   };
 
@@ -99,7 +97,7 @@ const Cart = () => {
 
   return (
     <>
-      <h1 className="text-center">My Cart</h1>
+      <h1 className="text-center">My Order</h1>
       <div className="w-75 mx-auto my-5">
         <table className="table">
           <thead>

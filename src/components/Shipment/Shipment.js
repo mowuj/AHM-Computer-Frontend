@@ -1,6 +1,13 @@
 import React, { useState } from "react";
-
-const Shipment = ({ onOrderSubmit }) => {
+import StripeForm from "../StripeForm/StripeForm";
+import { Elements } from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
+import CardModal from "../CardModal/CardModal";
+import Modal from "react-bootstrap/Modal";
+const stripePromise = loadStripe(
+  `pk_test_51L3HzCFICgNuMVET4lm1alcn4VyaJfMWJm0ke7akqFag2hi9hvzX0ZHIYGh48uaHZh5f2T4dUVyA44XHPcBVwelS006dwqyc2O`
+);
+const Shipment = ({ onOrderSubmit, setShowOrderInput }) => {
   const [shipmentData, setShipmentData] = useState({
     ordered_by: "",
     phone: "",
@@ -11,6 +18,9 @@ const Shipment = ({ onOrderSubmit }) => {
     payment_method: "Cash On Delivery",
   });
 
+  const [showShipmentModal, setShowShipmentModal] = useState(true);
+  const [showStripeModal, setShowStripeModal] = useState(false);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setShipmentData((prevData) => ({
@@ -19,9 +29,29 @@ const Shipment = ({ onOrderSubmit }) => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleStripePayment = async (stripeToken) => {
+    try {
+      setShowStripeModal(false);
+      setShowShipmentModal(false);
+
+      await makeAdditionalAPICall();
+    } catch (error) {
+      console.error("Error processing Stripe payment:", error);
+    }
+  };
+
+  const makeAdditionalAPICall = async () => {
+    console.log("Additional API call after successful payment");
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
     onOrderSubmit(shipmentData);
+
+    if (shipmentData.payment_method === "Stripe") {
+      setShowStripeModal(true);
+    }
   };
 
   return (
@@ -110,7 +140,6 @@ const Shipment = ({ onOrderSubmit }) => {
           >
             <option value="Cash On Delivery">Cash On Delivery</option>
             <option value="Stripe">Stripe</option>
-            {/* Add other payment methods as needed */}
           </select>
         </div>
 
@@ -118,6 +147,22 @@ const Shipment = ({ onOrderSubmit }) => {
           Submit Order
         </button>
       </form>
+      <Modal show={showStripeModal} onHide={() => setShowStripeModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Payment with Stripe</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Elements stripe={stripePromise}>
+            <StripeForm
+              onStripePayment={handleStripePayment}
+              onClose={() => {
+                setShowStripeModal(false);
+                setShowOrderInput(false);
+              }}
+            />
+          </Elements>
+        </Modal.Body>
+      </Modal>
     </div>
   );
 };

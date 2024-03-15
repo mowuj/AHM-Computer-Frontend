@@ -34,7 +34,7 @@ const Login = () => {
           localStorage.setItem("customer_id", data.customer_id);
 
           if (data.isStaff) {
-
+            localStorage.setItem("isAdmin", "true");
             navigate("/admin-dashboard");
           } else {
             
