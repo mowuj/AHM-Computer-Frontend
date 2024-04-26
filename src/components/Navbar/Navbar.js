@@ -6,9 +6,14 @@ import { CiUser } from "react-icons/ci";
 
 const Nav = () => {
   const [user, setUser] = useState("");
+  const [isAdmin, setIsAdmin] = useState(false);
+
   useEffect(() => {
     const user_id = localStorage.getItem("user_id");
+    const isAdminValue = localStorage.getItem("isAdmin");
+
     setUser(user_id);
+    setIsAdmin(isAdminValue === "true");
   }, []);
 
   const handleLogout = () => {
@@ -24,13 +29,14 @@ const Nav = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user_id");
     localStorage.removeItem("customer_id");
+    localStorage.removeItem("isAdmin");
     window.location.reload();
   };
 
   return (
     <nav className="navbar navbar-expand-lg bg-body-tertiary">
-      <div className="container-fluid">
-        <Link to={"/home"} className="navbar-brand">
+      <div className="container-fluid mx-4">
+        <Link to={"/"} className="navbar-brand">
           AHM Computer
         </Link>
         <button
@@ -47,12 +53,20 @@ const Nav = () => {
 
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+            
             <li className="nav-item">
               <Link to={"/products"} className="nav-link">
                 Shop
               </Link>
             </li>
-            {user && (
+            {isAdmin &&  (
+              <li className="nav-item">
+                <Link to={"/admin-dashboard"} className="nav-link">
+                  Admin Dashboard
+                </Link>
+              </li>
+            )}
+            {!isAdmin && user && (
               <>
                 <li className="nav-item">
                   <Link to={"/about"} className="nav-link">
@@ -64,6 +78,7 @@ const Nav = () => {
                     Contact
                   </Link>
                 </li>
+
                 <li className="nav-item">
                   <Link to={"/cart"} className="nav-link">
                     <IoMdCart className="text-3xl mr-3" />
@@ -85,10 +100,7 @@ const Nav = () => {
           </form>
           <div className="ms-auto">
             {!user ? (
-              <Link
-                to={"/login"}
-                className="text-dark p-2 rounded"
-              >
+              <Link to={"/login"} className="text-dark p-2 rounded">
                 <CiUser className="" /> Sign In
               </Link>
             ) : (

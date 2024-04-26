@@ -1,11 +1,12 @@
 import { Button } from "react-bootstrap";
 import Product from "../Product/Product";
 import useProduct from "../../hooks/useProduct";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import banner2 from "../../images/banner2.png";
 import TypeWriter from "typewriter-effect";
 import TopRated from "../TopRated/TopRated";
 import Sound from "../Sound/Sound";
+import noProduct from "../../images/no-product.png";
 const Home = () => {
   const [products, setProducts] = useProduct();
   const navigate = useNavigate();
@@ -46,7 +47,17 @@ const Home = () => {
             suscipit, reprehenderit numquam error optio illum voluptatibus sed
             eligendi ea cupiditate.
           </p>
-          <Button variant="danger">Contact Us</Button>
+          <Link className="text-primary" to="/contact">
+            <Button
+              variant="danger"
+              style={{
+                backgroundColor: "#D862BC",
+                color: "#ffff",
+              }}
+            >
+              Contact Us
+            </Button>
+          </Link>
         </div>
         <div className="banner-right col-md-6">
           <img
@@ -61,30 +72,34 @@ const Home = () => {
       {/* slider start */}
       <div id="products" className="container">
         <div className="row">
-          <h1
-            className="text-center mt-5"
-            style={{ color: "#F72798" }}
-          >
+          <h1 className="text-center mt-5" style={{ color: "#F72798" }}>
             Our Products
           </h1>
-          <div className="product-container">
-            <button
-              type="button"
-              class="btn btn-outline-danger"
-              onClick={handleNavigate}
-            >
-              Go to All Product
-            </button>
-            <div className="product my-2">
-              <div className="row row-cols-1 row-cols-md-4 g-4">
-                {products?.slice(0, 6).map((product) => (
-                  <div className="col-md-3" key={product.id}>
-                    <Product product={product}></Product>
-                  </div>
-                ))}
+          {products.length > 0 ? (
+            <div className="product-container">
+              <button
+                type="button"
+                class="btn btn-outline-danger"
+                onClick={handleNavigate}
+              >
+                Go to All Product
+              </button>
+              <div className="product my-2">
+                <div className="row row-cols-1 row-cols-md-4 g-4">
+                  {products?.slice(0, 6).map((product) => (
+                    <div className="col-md-3" key={product.id}>
+                      <Product product={product}></Product>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
-          </div>
+          ) : (
+            <div className="d-flex justify-content-center align-items-center">
+              <img src={noProduct} alt="" />
+            </div>
+          )}
+
           <div></div>
         </div>
       </div>

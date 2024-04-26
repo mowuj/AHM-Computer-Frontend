@@ -3,7 +3,7 @@ import React from 'react';
 const Footer = () => {
     return (
       <div class="p-5 bg-dark text-white">
-        <div class="container row w-75 m-auto p-5">
+        <div class="container row w-75 m-auto px-5">
           <div class="col-md-6">
             <p>
               <small>Copyright @ AHM Computer. All Rights Reserved</small>

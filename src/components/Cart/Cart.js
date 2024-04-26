@@ -3,7 +3,8 @@ import useCartItems from "../../hooks/useCartItems";
 import { useNavigate } from "react-router-dom";
 import Shipment from '../Shipment/Shipment'
 import Modal from "react-bootstrap/Modal";
-import "bootstrap/dist/css/bootstrap.min.css"; 
+import "bootstrap/dist/css/bootstrap.min.css";
+import noProduct from "../../images/no-product.png";
 
 const Cart = () => {
   const [loading, setLoading] = useState(false);
@@ -176,75 +177,82 @@ const handleShipmentSubmit = async (shipmentData) => {
   return (
     <>
       <h1 className="text-center">My Cart</h1>
-      <div className="w-75 mx-auto my-5">
-        <table className="table">
-          <thead>
-            <tr>
-              <th scope="col">ID</th>
-              <th scope="col">Product</th>
-              <th scope="col">Quantity</th>
-              <th scope="col">Price</th>
-              <th scope="col">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {cartItems.length > 0 ? (
-              cartItems.map((cartProduct) => (
-                <tr key={cartProduct.id}>
-                  <td>{cartProduct.id}</td>
-                  <td>{cartProduct.product.name}</td>
-                  <td>{cartProduct.quantity}</td>
-                  <td>{cartProduct.price}</td>
-                  <td>
-                    <button
-                      className="btn btn-danger"
-                      onClick={() => handleDelete(cartProduct.id)}
-                    >
-                      Delete
-                    </button>
+      {cartItems.length > 0 ? (
+        <div className="w-75 mx-auto my-5">
+          <table className="table">
+            <thead>
+              <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Product</th>
+                <th scope="col">Quantity</th>
+                <th scope="col">Price</th>
+                <th scope="col">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {cartItems.length > 0 ? (
+                cartItems.map((cartProduct) => (
+                  <tr key={cartProduct.id}>
+                    <td>{cartProduct.id}</td>
+                    <td>{cartProduct.product.name}</td>
+                    <td>{cartProduct.quantity}</td>
+                    <td>{cartProduct.price}</td>
+                    <td>
+                      <button
+                        className="btn btn-danger"
+                        onClick={() => handleDelete(cartProduct.id)}
+                      >
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="4">
+                    <img src={noProduct} alt="" />
                   </td>
                 </tr>
-              ))
-            ) : (
+              )}
               <tr>
-                <td colSpan="4">
-                  <h2 className="text-center">Not Found !!!</h2>
-                </td>
+                <td colSpan="2"></td>
+                <td className="fs-5">Total Price:</td>
+                <td className="fs-5">{totalAmount}</td>
               </tr>
-            )}
-            <tr>
-              <td colSpan="2"></td>
-              <td className="fs-5">Total Price:</td>
-              <td className="fs-5">{totalAmount}</td>
-            </tr>
-          </tbody>
-        </table>
-        <hr />
-        <div className="my-2 text-right">
-          <button
-            onClick={() => {
-              handleOrderNow();
-              setShowOrderInput(true);
-            }}
-            type="button"
-            className="btn btn-primary"
-          >
-            Order Now
-          </button>
-        </div>
+            </tbody>
+          </table>
 
-        <Modal show={showOrderInput} onHide={() => setShowOrderInput(false)}>
-          <Modal.Header closeButton>
-            <Modal.Title className="fs-5">Order Now</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <Shipment
-              onOrderSubmit={handleShipmentSubmit}
-              setShowOrderInput={setShowOrderInput}
-            />
-          </Modal.Body>
-        </Modal>
-      </div>
+          <hr />
+          <div className="my-2 text-right">
+            <button
+              onClick={() => {
+                handleOrderNow();
+                setShowOrderInput(true);
+              }}
+              type="button"
+              className="btn btn-primary"
+            >
+              Order Now
+            </button>
+          </div>
+
+          <Modal show={showOrderInput} onHide={() => setShowOrderInput(false)}>
+            <Modal.Header closeButton>
+              <Modal.Title className="fs-5">Order Now</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <Shipment
+                onOrderSubmit={handleShipmentSubmit}
+                setShowOrderInput={setShowOrderInput}
+              />
+            </Modal.Body>
+          </Modal>
+        </div>
+      ) : (
+        <div className="d-flex justify-content-center align-items-center">
+          <img src={noProduct} alt="" />
+        </div>
+      )}
     </>
   );
 };

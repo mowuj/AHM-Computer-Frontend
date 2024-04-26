@@ -75,7 +75,7 @@ const AddProduct = () => {
   };
 
   return (
-    <div className="container mt-3" style={{ height: "80vh" }}>
+    <div className="container my-5">
       <h2 className="text-center mb-5">Add New Product</h2>
       <form
         onSubmit={handleSubmit}

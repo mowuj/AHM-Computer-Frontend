@@ -12,7 +12,7 @@ const AllOrder = () => {
     "Order Completed",
     "Order Canceled",
   ];
-
+ 
   const fetchOrderData = async () => {
     try {
       const orderResponse = await fetch(

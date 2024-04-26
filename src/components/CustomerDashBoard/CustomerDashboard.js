@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import noProduct from "../../images/no-product.png";
 const CustomerDashboard = () => {
   const [customerOrders, setCustomerOrders] = useState([]);
   const customerId = localStorage.getItem("customer_id");
@@ -52,57 +53,63 @@ const CustomerDashboard = () => {
   return (
     <div className="container">
       <h1 className="text-center my-3">My Orders</h1>
-      <table className="table table-bordered bold-table-border">
-        <thead className="thead-dark">
-          <tr>
-            <th>ID</th>
-            <th>Total</th>
-            <th>Status</th>
-            <th>Shipping Address</th>
-            <th>Payment Method</th>
-            <th>Payment Completed</th>
-            <th>Order Products</th>
-          </tr>
-        </thead>
-        <tbody>
-          {customerOrders.map((order) => (
-            <tr key={order.id}>
-              <td>{order.id}</td>
-              <td>{order.total_amount}</td>
-              <td>{order.order_status}</td>
-              <td>{order.shipment?.shipping_address || "N/A"}</td>
-              <td>{order.shipment?.payment_method || "N/A"}</td>
-              <td>{order.shipment?.payment_completed ? "Yes" : "No"}</td>
-              <td>
-                {order.order_products?.length > 0 ? (
-                  <table className="table">
-                    <thead className="thead-light">
-                      <tr>
-                        <th>Product</th>
-                        <th>Quantity</th>
-                        <th>Subtotal</th>
-                        <th>Created At</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {order.order_products.map((product) => (
-                        <tr key={product.id}>
-                          <td>{product.product}</td>
-                          <td>{product.quantity}</td>
-                          <td>{product.subtotal}</td>
-                          <td>{product.created_at.slice(0, 16)}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                ) : (
-                  "No Order Products"
-                )}
-              </td>
+      {customerOrders.length > 0 ? (
+        <table className="table table-bordered bold-table-border">
+          <thead className="thead-dark">
+            <tr>
+              <th>ID</th>
+              <th>Total</th>
+              <th>Status</th>
+              <th>Shipping Address</th>
+              <th>Payment Method</th>
+              <th>Payment Completed</th>
+              <th>Order Products</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {customerOrders.map((order) => (
+              <tr key={order.id}>
+                <td>{order.id}</td>
+                <td>{order.total_amount}</td>
+                <td>{order.order_status}</td>
+                <td>{order.shipment?.shipping_address || "N/A"}</td>
+                <td>{order.shipment?.payment_method || "N/A"}</td>
+                <td>{order.shipment?.payment_completed ? "Yes" : "No"}</td>
+                <td>
+                  {order.order_products?.length > 0 ? (
+                    <table className="table">
+                      <thead className="thead-light">
+                        <tr>
+                          <th>Product</th>
+                          <th>Quantity</th>
+                          <th>Subtotal</th>
+                          <th>Created At</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {order.order_products.map((product) => (
+                          <tr key={product.id}>
+                            <td>{product.product}</td>
+                            <td>{product.quantity}</td>
+                            <td>{product.subtotal}</td>
+                            <td>{product.created_at.slice(0, 16)}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  ) : (
+                    "No Order Products"
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      ) : (
+        <div className="d-flex justify-content-center align-items-center">
+          <img src={noProduct} alt="" />
+        </div>
+      )}
     </div>
   );
 };

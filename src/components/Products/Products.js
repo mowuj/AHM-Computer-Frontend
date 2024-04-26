@@ -5,6 +5,7 @@ import { Dropdown } from "react-bootstrap";
 import toast, { Toaster } from "react-hot-toast";
 import useCategory from "../../hooks/useCategory";
 import useBrand from "../../hooks/useBrand";
+import noProduct from "../../images/no-product.png";
 
 const Products = () => {
   const [products, setProducts] = useProduct();
@@ -200,16 +201,22 @@ const Products = () => {
         </div>
 
         <div className="col-md-9">
-          <div className="row row-cols-1 row-cols-md-3 g-2">
-            {filteredProducts.map((product) => (
-              <div className="col" key={product.id}>
-                <Product
-                  product={product}
-                  addToCart={() => handleaddtocart(product)}
-                />
-              </div>
-            ))}
-          </div>
+          {filteredProducts.length > 0 ? (
+            <div className="row row-cols-1 row-cols-md-3 g-2">
+              {filteredProducts.map((product) => (
+                <div className="col" key={product.id}>
+                  <Product
+                    product={product}
+                    addToCart={() => handleaddtocart(product)}
+                  />
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="d-flex justify-content-center align-items-center">
+              <img src={noProduct} alt="" />
+            </div>
+          )}
         </div>
       </section>
     </div>

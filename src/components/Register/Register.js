@@ -69,7 +69,8 @@ const Register = () => {
       <Form
         method="post"
         onSubmit={handleSignup}
-        className="w-50 mx-auto my-5 p-5 border border-2 rounded"
+        className="mx-auto my-5 p-5 border border-2 rounded-5 shadow-lg"
+        style={{ maxWidth: "600px" }}
         enctype="multipart/form-data"
       >
         <Form.Group className="mb-3">
@@ -158,8 +159,8 @@ const Register = () => {
           </Link>
         </Form.Text>
 
-        <Button variant="primary" type="submit">
-          Submit
+        <Button variant="primary" type="submit" className="ms-3">
+          Register
         </Button>
       </Form>
     </>
